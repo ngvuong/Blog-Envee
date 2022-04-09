@@ -1,10 +1,20 @@
 const express = require('express');
+const logger = require('morgan');
 require('dotenv').config();
+
+const apiRouter = require('./routes/api');
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+// Middlewares
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use('/api', apiRouter);
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ error: err.message });
 });
 
 app.listen(process.env.PORT, () => {
