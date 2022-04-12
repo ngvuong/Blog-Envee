@@ -23,9 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', apiRouter);
-app.get('/', (req, res, next) => {
-  next(new appError('Page not found', 404));
-});
+
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
