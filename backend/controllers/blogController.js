@@ -1,18 +1,34 @@
-exports.blogs_list = function (req, res) {
-  res.json({ 'Blogs list': 'Here will be the list of blogs' });
-};
+const wrapAsync = require('../utils/wrapAsync');
+const Blog = require('../models/blog');
+const Comment = require('../models/comment');
 
-exports.blog_detail = function (req, res) {
-  res.json({ 'Blog detail': 'Here will be the detail of the blog' });
-};
+exports.blogs_list = wrapAsync(async (req, res) => {
+  const blogs = await Blog.find().sort({ createdAt: 'desc' });
+
+  res.status(200).json({ blogs });
+});
+
+exports.blog_detail = wrapAsync(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  res.status(200).json({ blog });
+});
 
 exports.blog_create_get = function (req, res) {
   res.json({ 'Create blog': 'Here will be the form to create a blog' });
 };
 
-exports.blog_create_post = function (req, res) {
-  res.json({ 'Create blog': 'Post blog' });
-};
+exports.blog_create_post = wrapAsync(async (req, res) => {
+  const { title, content } = req.body;
+  const blog = await Blog.create({
+    title,
+    content,
+    author: 'Vuong',
+    comments: ['6254dfaaf13d461825115996'],
+  });
+
+  res.status(200).json({ blog });
+});
 
 exports.blog_update = function (req, res) {
   res.json({ 'Update blog': 'Here will be the form to update a blog' });
