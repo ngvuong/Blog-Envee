@@ -20,7 +20,10 @@ exports.user_register = (req, res, next) => {
     user.save((err) => {
       if (err) return next(err);
       passport.authenticate('local')(req, res, () => {
-        res.status(200).json({ user });
+        const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+          expiresIn: '7d',
+        });
+        return res.status(200).json({ user, token });
       });
     });
   });
@@ -34,9 +37,14 @@ exports.user_login = (req, res, next) => {
     req.logIn(user, { session: false }, (err) => {
       if (err) return next(err);
       const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-        expiresIn: '30d',
+        expiresIn: '7d',
       });
       return res.status(200).json({ user, token });
     });
   })(req, res, next);
+};
+
+exports.user_logout = (req, res) => {
+  req.logout();
+  res.json({ message: 'Logged out' });
 };
