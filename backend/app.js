@@ -1,6 +1,8 @@
 const express = require('express');
+const passport = require('passport');
 const logger = require('morgan');
 require('dotenv').config();
+require('./config/passport');
 
 const connectDB = require('./config/db');
 
@@ -15,6 +17,7 @@ const app = express();
 connectDB();
 
 // Middlewares
+// app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

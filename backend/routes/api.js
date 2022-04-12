@@ -3,6 +3,7 @@ const router = express.Router();
 
 const blogController = require('../controllers/blogController');
 const commentController = require('../controllers/commentController');
+const userController = require('../controllers/userController');
 
 // Blogs routes
 router.get('/blogs', blogController.blogs_list);
@@ -20,5 +21,9 @@ router
 
 // Comments routes
 router.route('/create-comment').post(commentController.comment_create);
+
+// Users routes
+router.post('/users/register', userController.user_register);
+router.post('/users/login', userController.user_login);
 
 module.exports = router;

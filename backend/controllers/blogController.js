@@ -9,7 +9,7 @@ exports.blogs_list = wrapAsync(async (req, res) => {
 });
 
 exports.blog_detail = wrapAsync(async (req, res) => {
-  const blog = await Blog.findById(req.params.id);
+  const blog = await Blog.findById(req.params.id).populate('comments');
 
   res.status(200).json({ blog });
 });
