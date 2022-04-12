@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');
 
-const errorHandler = require('./utils/errorMiddleware');
+const errorHandler = require('./utils/errorHandler');
 const appError = require('./utils/appError');
 
 const apiRouter = require('./routes/api');
