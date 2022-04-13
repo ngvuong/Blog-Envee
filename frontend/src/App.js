@@ -11,8 +11,10 @@ const theme = {
   colors: {
     header: '#212529',
     gold_primary: '#FFCC20',
+    gold_secondary: '#FFD700',
     background: '#2C3030',
     text: '#d7dadc',
+    link: '#00b0ff',
   },
 };
 

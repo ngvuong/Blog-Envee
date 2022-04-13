@@ -6,14 +6,13 @@ import envee from '../assets/envee.svg';
 function Header() {
   return (
     <StyledHeader>
-      <h1>
-        <img src={envee} alt='letter e' />
+      <div>
         <Link to='/'>
           Blog
-          <img src={envee} alt='' />
+          <img src={envee} alt='Letter e' />
           nvee
         </Link>
-      </h1>
+      </div>
 
       <nav>
         <ul>
@@ -34,9 +33,22 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-
   color: ${({ theme }) => theme.colors.gold_primary};
   background-color: ${({ theme }) => theme.colors.header};
+
+  div {
+    font-size: 3.2rem;
+    font-weight: 900;
+
+    a {
+      text-shadow: 5px 5px 5px #000;
+    }
+  }
+
+  div a,
+  nav a {
+    color: inherit;
+  }
 
   img {
     height: 3.5rem;
@@ -45,11 +57,13 @@ const StyledHeader = styled.header`
     border-radius: 50%;
     margin-left: 0.5rem;
     vertical-align: middle;
+    box-shadow: 5px 5px 5px #000;
   }
 
   ul {
     display: flex;
     gap: 1rem;
+    font-weight: bold;
   }
 `;
 

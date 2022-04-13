@@ -20,12 +20,17 @@ const GlobalStyles = createGlobalStyle`
   }
 
   a, a:link, a:visited {
-    color: inherit;
+    color: ${({ theme }) => theme.colors.link};
     text-decoration: none;
+  }
+
+  main {
+    text-align: center;
   }
 
   button {
     font: inherit;
+    color: inherit;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -33,6 +38,23 @@ const GlobalStyles = createGlobalStyle`
 
   ul {
     list-style: none;
+  }
+
+  h1 {
+    margin: 2rem 0;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    text-align: center;
+  }
+
+  input, textarea {
+    font: inherit;
+    color: inherit;
+    background: inherit;
+    padding: .5rem;
+    border: none;
+    resize: vertical;
   }
 
 `;
