@@ -20,6 +20,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   a, a:link, a:visited {
+    color: inherit;
     text-decoration: none;
   }
 
@@ -28,6 +29,10 @@ const GlobalStyles = createGlobalStyle`
     background: transparent;
     border: none;
     cursor: pointer;
+  }
+
+  ul {
+    list-style: none;
   }
 
 `;
