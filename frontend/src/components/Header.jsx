@@ -1,10 +1,22 @@
+import { useAuth } from '../contexts/authContext';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { AiOutlineUserAdd, AiOutlineLogin } from 'react-icons/ai';
+import {
+  AiOutlineUserAdd,
+  AiOutlineLogin,
+  AiOutlineLogout,
+  AiOutlineUser,
+} from 'react-icons/ai';
 import envee from '../assets/envee.svg';
 
 function Header() {
+  const [{ isAuthenticated, user }, dispatch] = useAuth();
+
+  const onLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
+
   return (
     <StyledHeader>
       <div>
@@ -17,18 +29,34 @@ function Header() {
 
       <nav>
         <ul>
-          <li>
-            <Link to='/login'>
-              {' '}
-              <AiOutlineLogin /> Login
-            </Link>
-          </li>
-          <li>
-            <Link to='/register'>
-              {' '}
-              <AiOutlineUserAdd /> Register
-            </Link>
-          </li>
+          {isAuthenticated ? (
+            <>
+              <li>
+                <AiOutlineUser /> {user.username}
+              </li>
+              <li>
+                <button onClick={onLogout}>
+                  {' '}
+                  <AiOutlineLogout /> Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to='/login'>
+                  {' '}
+                  <AiOutlineLogin /> Login
+                </Link>
+              </li>
+              <li>
+                <Link to='/register'>
+                  {' '}
+                  <AiOutlineUserAdd /> Register
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </StyledHeader>
@@ -77,7 +105,9 @@ const StyledHeader = styled.header`
     gap: 1rem;
     font-weight: bold;
 
-    a {
+    a,
+    button,
+    li {
       display: flex;
       align-items: center;
       gap: 0.5rem;

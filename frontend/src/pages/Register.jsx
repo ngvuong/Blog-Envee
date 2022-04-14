@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import Form from '../components/Form';
 import Button from '../components/Button';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/authContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { register } from '../api/authService';
 
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
 function Register() {
+  const [, dispatch] = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -15,6 +18,8 @@ function Register() {
   const [validConfirm, setValidConfirm] = useState(true);
 
   const { username, email, password, passwordConfirmation } = formData;
+
+  const navigate = useNavigate();
 
   const onInputChange = (e) => {
     setFormData((prevData) => {
@@ -35,10 +40,15 @@ function Register() {
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formData);
+    const user = await register(formData);
+
+    if (user) {
+      dispatch({ type: 'LOGIN', user });
+      navigate('/');
+    }
   };
 
   return (

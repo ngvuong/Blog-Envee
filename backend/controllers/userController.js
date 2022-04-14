@@ -6,7 +6,7 @@ const User = require('../models/user');
 const appError = require('../utils/appError');
 
 exports.user_register = (req, res, next) => {
-  const { username, password, email } = req.body;
+  const { username, email, password } = req.body;
 
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) return next(err);
@@ -23,7 +23,13 @@ exports.user_register = (req, res, next) => {
         const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
           expiresIn: '7d',
         });
-        return res.status(200).json({ user, token });
+
+        return res.status(200).json({
+          id: user._id,
+          username: user.username,
+          admin: user.admin,
+          token,
+        });
       });
     });
   });
@@ -39,7 +45,13 @@ exports.user_login = (req, res, next) => {
       const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
         expiresIn: '7d',
       });
-      return res.status(200).json({ user, token });
+
+      return res.status(200).json({
+        id: user._id,
+        username: user.username,
+        admin: user.admin,
+        token,
+      });
     });
   })(req, res, next);
 };
