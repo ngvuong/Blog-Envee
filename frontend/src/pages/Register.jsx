@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Form from '../components/Form';
 import Button from '../components/Button';
 import { Link } from 'react-router-dom';
@@ -6,16 +6,39 @@ import { Link } from 'react-router-dom';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
 function Register() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+  });
   const [validConfirm, setValidConfirm] = useState(true);
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
 
-  const onInputChange = () => {
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      setValidConfirm(false);
-    } else {
-      setValidConfirm(true);
-    }
+  const { username, email, password, passwordConfirmation } = formData;
+
+  const onInputChange = (e) => {
+    setFormData((prevData) => {
+      const newData = { ...prevData, [e.target.name]: e.target.value };
+
+      if (
+        e.target.name === 'password' ||
+        e.target.name === 'passwordConfirmation'
+      ) {
+        if (newData.password !== newData.passwordConfirmation) {
+          setValidConfirm(false);
+        } else {
+          setValidConfirm(true);
+        }
+      }
+
+      return newData;
+    });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(formData);
   };
 
   return (
@@ -31,16 +54,19 @@ function Register() {
       </section>
 
       <section>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <div>
             <label htmlFor='username'>Username</label>
             <input
               type='text'
               name='username'
               id='username'
+              onChange={onInputChange}
+              value={username}
               placeholder='Enter username'
               minLength='3'
               required
+              autoFocus
             />
           </div>
           <div>
@@ -49,6 +75,8 @@ function Register() {
               type='email'
               name='email'
               id='email'
+              onChange={onInputChange}
+              value={email}
               placeholder='Enter email'
               required
             />
@@ -60,24 +88,26 @@ function Register() {
               onInput={onInputChange}
               name='password'
               id='password'
+              onChange={onInputChange}
+              value={password}
               placeholder='Enter password'
               minLength='6'
               required
-              ref={passwordRef}
             />
           </div>
           <div>
-            <label htmlFor='password-confirm'>Confirm Password</label>
+            <label htmlFor='passwordConfirmation'>Confirm Password</label>
             <input
               type='password'
               className={validConfirm ? '' : 'invalid'}
               onInput={onInputChange}
-              name='password-confirm'
-              id='password-confirm'
+              name='passwordConfirmation'
+              id='passwordConfirmation'
+              onChange={onInputChange}
+              value={passwordConfirmation}
               placeholder='Enter password confirmation'
               minLength='6'
               required
-              ref={passwordConfirmRef}
             />
           </div>
           <Button

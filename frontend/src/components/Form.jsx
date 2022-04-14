@@ -41,8 +41,13 @@ const StyledForm = styled.form`
   }
 
   input:not(:placeholder-shown):invalid,
-  input.invalid {
+  input:not(:placeholder-shown).invalid {
     border: 1px solid #da5050;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
   }
 
   @media (max-width: 768px) {
