@@ -1,4 +1,5 @@
 import { useAuth } from '../contexts/authContext';
+import { logout } from '../api/authService';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -15,6 +16,7 @@ function Header() {
 
   const onLogout = () => {
     dispatch({ type: 'LOGOUT' });
+    logout();
   };
 
   return (

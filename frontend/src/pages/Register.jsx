@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from '../components/Form';
 import Button from '../components/Button';
 import { useAuth } from '../contexts/authContext';
@@ -8,7 +8,7 @@ import { register } from '../api/authService';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
 function Register() {
-  const [, dispatch] = useAuth();
+  const [{ isAuthenticated }, dispatch] = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -20,6 +20,12 @@ function Register() {
   const { username, email, password, passwordConfirmation } = formData;
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [navigate, isAuthenticated]);
 
   const onInputChange = (e) => {
     setFormData((prevData) => {

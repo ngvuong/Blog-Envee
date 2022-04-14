@@ -29,8 +29,10 @@ function authReducer(state, action) {
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, {
-    isAuthenticated: false,
-    user: null,
+    isAuthenticated: localStorage.getItem('user') !== null,
+    user: localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user'))
+      : null,
   });
 
   const value = [state, dispatch];
