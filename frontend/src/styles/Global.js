@@ -24,13 +24,14 @@ const GlobalStyles = createGlobalStyle`
     text-decoration: none;
   }
 
-  main {
+  main, section {
     text-align: center;
   }
 
   button {
     font: inherit;
     color: inherit;
+    font-weight: bold;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -41,6 +42,11 @@ const GlobalStyles = createGlobalStyle`
   }
 
   h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    font-size: 3rem;
     margin: 2rem 0;
   }
 

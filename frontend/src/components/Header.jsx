@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { AiOutlineUserAdd, AiOutlineLogin } from 'react-icons/ai';
 import envee from '../assets/envee.svg';
 
 function Header() {
@@ -17,10 +18,16 @@ function Header() {
       <nav>
         <ul>
           <li>
-            <Link to='/login'>Login</Link>
+            <Link to='/login'>
+              {' '}
+              <AiOutlineLogin /> Login
+            </Link>
           </li>
           <li>
-            <Link to='/register'>Register</Link>
+            <Link to='/register'>
+              {' '}
+              <AiOutlineUserAdd /> Register
+            </Link>
           </li>
         </ul>
       </nav>
@@ -29,12 +36,17 @@ function Header() {
 }
 
 const StyledHeader = styled.header`
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
   color: ${({ theme }) => theme.colors.gold_primary};
   background-color: ${({ theme }) => theme.colors.header};
+  padding: 1rem;
+  border-radius: 1rem;
+  margin: 1rem 2rem;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
 
   div {
     font-size: 3.2rem;
@@ -64,6 +76,12 @@ const StyledHeader = styled.header`
     display: flex;
     gap: 1rem;
     font-weight: bold;
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 `;
 

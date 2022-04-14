@@ -7,7 +7,7 @@ function Form(props) {
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
   width: 50%;
   padding: 1rem;
   margin: 2rem auto;
@@ -23,11 +23,11 @@ const StyledForm = styled.form`
   div {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
   }
 
   label {
-    color: ${({ theme }) => theme.colors.gold_secondary};
+    font-weight: bold;
+    text-align: left;
   }
 
   input,
@@ -43,6 +43,10 @@ const StyledForm = styled.form`
   input:not(:placeholder-shown):invalid,
   input.invalid {
     border: 1px solid #da5050;
+  }
+
+  @media (max-width: 768px) {
+    width: 70%;
   }
 `;
 
