@@ -14,14 +14,19 @@ const register = async (userData) => {
 };
 
 // Login user
-const login = async (userData) => {
-  const response = await axios.post(API_URL + 'login', userData);
+const login = async (dispatch, userData) => {
+  try {
+    const response = await axios.post(API_URL + 'login', userData);
+    console.log(response);
+    if (response.data) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+      dispatch({ type: 'LOGIN_SUCCESS', user: response.data });
+    }
 
-  if (response.data) {
-    localStorage.setItem('user', JSON.stringify(response.data));
+    return response.data;
+  } catch (error) {
+    dispatch({ type: 'LOGIN_FAIL', error: error.response.data.message });
   }
-
-  return response.data;
 };
 
 // Logout user

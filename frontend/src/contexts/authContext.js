@@ -4,23 +4,29 @@ const AuthContext = createContext({});
 
 function authReducer(state, action) {
   switch (action.type) {
-    case 'REGISTER':
+    case 'LOGIN_SUCCESS':
       return {
         ...state,
         isAuthenticated: true,
         user: action.user,
       };
-    case 'LOGIN':
+    case 'LOGIN_FAIL':
       return {
         ...state,
-        isAuthenticated: true,
-        user: action.user,
+        isAuthenticated: false,
+        error: action.error,
+        user: null,
       };
     case 'LOGOUT':
       return {
         ...state,
         isAuthenticated: false,
         user: null,
+      };
+    case 'RESET':
+      return {
+        ...state,
+        error: null,
       };
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -33,6 +39,7 @@ function AuthProvider({ children }) {
     user: localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
       : null,
+    error: null,
   });
 
   const value = [state, dispatch];

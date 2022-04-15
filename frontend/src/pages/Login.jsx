@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Form from '../components/Form';
 import Button from '../components/Button';
+import Error from '../components/Error';
 import { useAuth } from '../contexts/authContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../api/authService';
@@ -8,7 +9,7 @@ import { login } from '../api/authService';
 import { AiOutlineLogin } from 'react-icons/ai';
 
 function Login() {
-  const [{ isAuthenticated }, dispatch] = useAuth();
+  const [{ isAuthenticated, error }, dispatch] = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,6 +25,12 @@ function Login() {
     }
   }, [navigate, isAuthenticated]);
 
+  useEffect(() => {
+    if (error) {
+      setFormData({ email: '', password: '' });
+    }
+  }, [error]);
+
   const onInputChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -31,14 +38,11 @@ function Login() {
     }));
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
-    const user = await login(formData);
-    if (user) {
-      dispatch({ type: 'LOGIN', user });
-      navigate('/');
-    }
+    dispatch({ type: 'RESET' });
+    login(dispatch, formData);
   };
 
   return (
@@ -55,6 +59,7 @@ function Login() {
 
       <section>
         <Form onSubmit={onSubmit}>
+          {error ? <Error>{error}</Error> : null}
           <div>
             <label htmlFor='email'>Email</label>
             <input
