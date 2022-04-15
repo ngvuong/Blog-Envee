@@ -115,6 +115,12 @@ const StyledHeader = styled.header`
       gap: 0.5rem;
     }
   }
+
+  @media (max-width: 450px) {
+    ul {
+      flex-direction: column;
+    }
+  }
 `;
 
 export default Header;

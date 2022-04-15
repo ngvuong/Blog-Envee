@@ -26,6 +26,7 @@ const StyledForm = styled.form`
   }
 
   label {
+    color: #ccc;
     font-weight: bold;
     text-align: left;
   }
