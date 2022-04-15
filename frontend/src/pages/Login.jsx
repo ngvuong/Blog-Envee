@@ -19,6 +19,8 @@ function Login() {
 
   const navigate = useNavigate();
 
+  const validationErrors = typeof error === 'object' ? null : error;
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
@@ -26,10 +28,10 @@ function Login() {
   }, [navigate, isAuthenticated]);
 
   useEffect(() => {
-    if (error) {
+    if (validationErrors) {
       setFormData({ email: '', password: '' });
     }
-  }, [error]);
+  }, [validationErrors]);
 
   const onInputChange = (e) => {
     setFormData((prevData) => ({
@@ -59,7 +61,7 @@ function Login() {
 
       <section>
         <Form onSubmit={onSubmit}>
-          {error ? <Error>{error}</Error> : null}
+          {validationErrors ? <Error>{validationErrors}</Error> : null}
           <div>
             <label htmlFor='email'>Email</label>
             <input

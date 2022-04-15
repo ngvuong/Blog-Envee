@@ -12,11 +12,12 @@ function Error({ children }) {
 
 const StyledP = styled.p`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
   color: #db3030;
   background: #fcebee;
+  padding: 0.5rem;
   margin: 2rem 0;
 `;
 

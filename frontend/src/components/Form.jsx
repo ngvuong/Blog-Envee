@@ -36,7 +36,7 @@ const StyledForm = styled.form`
     border-radius: 0.5rem;
   }
 
-  input:valid {
+  input:not(:placeholder-shown):valid {
     border: 1px solid #4caf50;
   }
 
