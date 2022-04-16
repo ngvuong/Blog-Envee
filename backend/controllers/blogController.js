@@ -3,7 +3,7 @@ const Blog = require('../models/blog');
 const Comment = require('../models/comment');
 
 exports.blogs_list = wrapAsync(async (req, res) => {
-  const blogs = await Blog.find().sort({ createdAt: 'desc' });
+  const blogs = await Blog.find().sort({ updatedAt: 'desc' });
 
   res.json({ blogs });
 });
@@ -19,23 +19,24 @@ exports.blog_create_get = function (req, res) {
 };
 
 exports.blog_create_post = wrapAsync(async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, author, image, published } = req.body;
   const blog = await Blog.create({
     title,
     content,
-    author: 'Vuong',
-    comments: ['6254dfaaf13d461825115996'],
+    author,
+    image,
+    published,
   });
 
   res.json({ blog });
 });
 
 exports.blog_update = wrapAsync(async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, image, published } = req.body;
 
   const blog = await Blog.findByIdAndUpdate(
     req.params.id,
-    { title, content },
+    { title, content, image, published },
     { new: true }
   );
 
