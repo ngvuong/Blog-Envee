@@ -1,10 +1,30 @@
+import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
+import { getBlogs } from '../api/blogService';
 import styled from 'styled-components';
 
 import { AiOutlineArrowDown } from 'react-icons/ai';
 import web from '../assets/web.png';
 
 function Home() {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    getBlogs().then((data) => {
+      const publishedBlogs = data.blogs.filter((blog) => blog.published);
+      setBlogs(publishedBlogs);
+    });
+  }, []);
+
+  const blogCards = blogs.map((blog) => {
+    return (
+      <article key={blog._id}>
+        <h3>{blog.title}</h3>
+        <img src={blog.image} alt='blog post placeholder' />
+      </article>
+    );
+  });
+
   return (
     <StyledContainer>
       <section>
@@ -24,41 +44,23 @@ function Home() {
         </div>
         <img src={web} alt='web technologies' draggable='false' />
       </section>
+      <hr />
       <section id='blogs'>
         <h2>Blogs</h2>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa animi
-          hic laboriosam reprehenderit officiis quaerat a optio quia deserunt
-          harum? Cumque quisquam, modi atque laboriosam architecto amet iusto
-          ullam? Voluptas. Lorem ipsum dolor sit, amet consectetur adipisicing
-          elit. Tempora a repudiandae harum sequi aliquid magnam pariatur,
-          recusandae dolor dicta? Consectetur veritatis ducimus vitae ratione in
-          sint? Error dicta officiis illo quas voluptatibus consequatur eum cum
-          porro ea, quibusdam ullam illum voluptates eos quisquam nemo. Enim
-          numquam officiis praesentium consectetur aliquam! Lorem ipsum dolor
-          sit, amet consectetur adipisicing elit. Eum non mollitia ab harum ad
-          commodi repudiandae, quo ipsum numquam perferendis culpa optio
-          distinctio? Sed et eum, nemo atque dolores consequuntur quia? Autem
-          perspiciatis pariatur necessitatibus laboriosam qui exercitationem
-          vitae amet assumenda quod ducimus nulla dolores animi error asperiores
-          numquam quisquam ea provident excepturi, sapiente sequi, repudiandae
-          optio, explicabo magni corporis! Numquam vitae cum culpa
-          necessitatibus, hic dolor aut voluptate officia neque? Nobis nostrum
-          ab suscipit eaque quia magnam voluptatem id laborum, cupiditate iure
-          modi, asperiores ex minus eveniet aperiam aliquid similique sit dicta
-          deleniti doloremque inventore. Saepe nisi magni suscipit.
-        </p>
+        <div>{blogCards}</div>
       </section>
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.main`
-  section {
+  padding: 5rem;
+
+  section:first-child {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5rem;
+    margin-bottom: 5rem;
 
     div {
       width: 50%;
@@ -83,16 +85,49 @@ const StyledContainer = styled.main`
     a {
       color: #252525;
     }
+
+    h2 {
+      font-size: 3rem;
+    }
+  }
+
+  section:last-child {
+    margin-top: 5rem;
+
+    h2 {
+      margin: 2rem 0;
+    }
+
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+    }
+    article {
+      flex: 1 1 20rem;
+      background-color: #2d5050;
+
+      img {
+        width: 100%;
+      }
+    }
   }
 
   @media (max-width: 768px) {
-    section {
+    padding: 2rem;
+
+    section:first-child {
       flex-direction: column-reverse;
       gap: 2rem;
 
       div {
         width: 100%;
-        text-align: center;
+      }
+
+      img {
+        width: 50%;
       }
     }
   }
