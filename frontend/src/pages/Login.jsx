@@ -10,6 +10,7 @@ import { AiOutlineLogin } from 'react-icons/ai';
 
 function Login() {
   const [{ isAuthenticated, error }, dispatch] = useAuth();
+  const [validationError, setValidationError] = useState();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,8 +20,6 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const validationErrors = typeof error === 'object' ? null : error;
-
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
@@ -28,10 +27,13 @@ function Login() {
   }, [navigate, isAuthenticated]);
 
   useEffect(() => {
-    if (validationErrors) {
+    if (error) {
+      setValidationError(error);
       setFormData({ email: '', password: '' });
     }
-  }, [validationErrors]);
+
+    return () => dispatch({ type: 'RESET' });
+  }, [error, dispatch]);
 
   const onInputChange = (e) => {
     setFormData((prevData) => ({
@@ -43,7 +45,6 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    dispatch({ type: 'RESET' });
     login(dispatch, formData);
   };
 
@@ -61,7 +62,7 @@ function Login() {
 
       <section>
         <Form onSubmit={onSubmit}>
-          {validationErrors ? <Error>{validationErrors}</Error> : null}
+          {validationError && <Error>{validationError}</Error>}
           <div>
             <label htmlFor='email'>Email</label>
             <input

@@ -10,6 +10,7 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 
 function Register() {
   const [{ isAuthenticated, error }, dispatch] = useAuth();
+  const [validationError, setValidationError] = useState();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -22,8 +23,6 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const validationErrors = typeof error === 'object' ? error : null;
-
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
@@ -31,7 +30,8 @@ function Register() {
   }, [navigate, isAuthenticated]);
 
   useEffect(() => {
-    if (validationErrors) {
+    if (error) {
+      setValidationError(error);
       setFormData({
         username: '',
         email: '',
@@ -39,7 +39,9 @@ function Register() {
         passwordConfirmation: '',
       });
     }
-  }, [validationErrors]);
+
+    return () => dispatch({ type: 'RESET' });
+  }, [error, dispatch]);
 
   const onInputChange = (e) => {
     setFormData((prevData) => {
@@ -63,7 +65,6 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    dispatch({ type: 'RESET' });
     register(dispatch, formData);
   };
 
@@ -81,9 +82,9 @@ function Register() {
 
       <section>
         <Form onSubmit={onSubmit}>
-          {validationErrors ? (
+          {validationError ? (
             <Error>
-              {validationErrors.map((err) => (
+              {validationError.map((err) => (
                 <span key={err.param}>{err.msg}</span>
               ))}
             </Error>
