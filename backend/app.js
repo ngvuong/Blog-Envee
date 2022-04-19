@@ -1,5 +1,4 @@
 const express = require('express');
-const passport = require('passport');
 const logger = require('morgan');
 require('dotenv').config();
 require('./config/passport');
@@ -7,9 +6,10 @@ require('./config/passport');
 const connectDB = require('./config/db');
 
 const errorHandler = require('./utils/errorHandler');
-const appError = require('./utils/appError');
 
-const apiRouter = require('./routes/api');
+const blogRouter = require('./routes/blogRoutes');
+const userRouter = require('./routes/userRoutes');
+const commentRouter = require('./routes/commentRoutes');
 
 const app = express();
 
@@ -22,7 +22,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api', apiRouter);
+app.use('/api/blogs', blogRouter);
+app.use('/api/users', userRouter);
+app.use('/api/comments', commentRouter);
 
 app.use(errorHandler);
 
