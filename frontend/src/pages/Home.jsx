@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
 import BlogCard from '../components/BlogCard';
 import { getBlogs } from '../api/blogService';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { parseISO, format } from 'date-fns';
 
 import { AiOutlineArrowDown } from 'react-icons/ai';
 import web from '../assets/web.png';
