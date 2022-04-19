@@ -19,12 +19,17 @@ exports.blog_create_get = function (req, res) {
 };
 
 exports.blog_create_post = wrapAsync(async (req, res) => {
-  const { title, content, author, image, published } = req.body;
+  const { title, content, author, image, topics, published } = req.body;
+  const topicsArr = [
+    ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
+  ];
+
   const blog = await Blog.create({
     title,
     content,
     author,
     image,
+    topics: topicsArr,
     published,
   });
 

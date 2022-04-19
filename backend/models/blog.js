@@ -10,6 +10,7 @@ const blogSchema = new Schema(
       type: String,
       default: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
     },
+    topics: { type: Array, default: ['Web Development'] },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     published: { type: Boolean, default: false },
   },

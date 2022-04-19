@@ -31,7 +31,7 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/blog:blogid' element={<Blog />} />
+              <Route path='/blogs/:blogid' element={<Blog />} />
             </Routes>
           </AuthProvider>
         </ThemeProvider>
