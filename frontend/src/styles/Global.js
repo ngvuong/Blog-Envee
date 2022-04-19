@@ -17,6 +17,14 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.6rem;
     line-height: 1.5;
     background-color: ${({ theme }) => theme.colors.background};
+    animation: hideScroll 1s backwards;
+  }
+
+  @keyframes hideScroll {
+    from, to { 
+      overflow-x: hidden;
+      overflow-y: visible; 
+    }
   }
 
   a, a:link, a:visited {

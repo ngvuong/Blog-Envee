@@ -14,7 +14,7 @@ const theme = {
     gold_primary: '#FFCC20',
     gold_secondary: '#FFD700',
     background: '#2C3030',
-    text: '#d7dadc',
+    text: '#F7F7F7',
     link: '#00b0ff',
   },
 };

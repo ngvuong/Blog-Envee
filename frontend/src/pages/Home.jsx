@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
+import BlogCard from '../components/BlogCard';
 import { getBlogs } from '../api/blogService';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -18,23 +19,6 @@ function Home() {
     });
   }, []);
 
-  const blogCards = blogs.map((blog) => {
-    return (
-      <article key={blog._id}>
-        <Link to={`blogs/${blog._id}`}>
-          <img src={blog.image} alt='blog post placeholder' />
-          <h3>{blog.title}</h3>
-          <p>{format(parseISO(blog.createdAt), 'MMMM do, yyyy')}</p>
-          <ul>
-            {blog.topics.map((topic) => (
-              <li key={topic}>{topic}</li>
-            ))}
-          </ul>
-        </Link>
-      </article>
-    );
-  });
-
   return (
     <StyledContainer>
       <section>
@@ -46,7 +30,7 @@ function Home() {
             technologies and everything web. Join in on the discussion and share
             your thoughts on your favorite content.
           </p>
-          <Button background='#d9d9d9'>
+          <Button tabIndex='-1' background='#d9d9d9'>
             <a href='#blogs'>
               Read Now <AiOutlineArrowDown />
             </a>
@@ -57,7 +41,11 @@ function Home() {
       <hr />
       <section id='blogs'>
         <h2>Blogs</h2>
-        <div>{blogCards}</div>
+        <div>
+          {blogs.map((blog) => (
+            <BlogCard key={blog._id} blog={blog} />
+          ))}
+        </div>
       </section>
     </StyledContainer>
   );
@@ -75,6 +63,19 @@ const StyledContainer = styled.main`
     div {
       width: 50%;
       text-align: left;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(25%);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
@@ -91,6 +92,19 @@ const StyledContainer = styled.main`
 
     img {
       width: 30%;
+      animation: zoomIn 1s ease-in-out;
+    }
+
+    @keyframes zoomIn {
+      0% {
+        opacity: 0;
+        transform: scale(1.3);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     a {
@@ -98,6 +112,12 @@ const StyledContainer = styled.main`
       align-items: center;
       gap: 0.5rem;
       color: #252525;
+    }
+
+    a:focus {
+      border-radius: 0.5rem;
+      outline: 2px solid ${({ theme }) => theme.colors.gold_secondary};
+      outline-offset: 1.2rem;
     }
   }
 
@@ -114,55 +134,6 @@ const StyledContainer = styled.main`
       flex-wrap: wrap;
       justify-content: center;
       gap: 5rem 2rem;
-    }
-
-    article {
-      flex: 1 1 30rem;
-      box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
-      padding-bottom: 2rem;
-
-      a {
-        color: inherit;
-      }
-
-      h3 {
-        font-size: 2.4rem;
-        text-transform: capitalize;
-        margin-top: 2rem;
-      }
-
-      img {
-        width: 100%;
-        height: 30vw;
-        object-fit: cover;
-        border-radius: 0.5rem;
-        transition: all 0.25s cubic-bezier(0.5, 0, 0.5, 1);
-      }
-
-      a:hover img {
-        box-shadow: 0 0 0 0.5rem ${({ theme }) => theme.colors.gold_primary};
-        transform: scale(1.025);
-      }
-
-      p {
-        color: #999;
-        font-size: 2rem;
-      }
-
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-top: 1rem;
-
-        li {
-          text-transform: capitalize;
-          background-color: #41555f;
-          padding: 0 0.5rem;
-          border-radius: 1rem;
-        }
-      }
     }
   }
 

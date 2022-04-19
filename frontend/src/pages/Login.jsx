@@ -21,6 +21,10 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = 'Login';
+  }, []);
+
+  useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }

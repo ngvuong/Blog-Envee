@@ -24,6 +24,10 @@ function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = 'Register';
+  }, []);
+
+  useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
