@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner';
 import Comment from '../components/Comment';
 import styled from 'styled-components';
 import { parseISO, format } from 'date-fns';
+import CommentForm from '../components/CommentForm';
 
 function Blog() {
   const [blog, setBlog] = useState();
@@ -66,10 +67,12 @@ function Blog() {
           <section>{blog.content}</section>
           <section>
             <h2>Discussion ({blog.comments.length})</h2>
-            <></>
-            {blog.comments.map((comment) => (
-              <Comment key={comment._id} comment={comment} />
-            ))}
+            <CommentForm blogid={blogid} />
+            {blog.comments
+              .sort((c1, c2) => c2.createdAt > c1.createdAt)
+              .map((comment) => (
+                <Comment key={comment._id} comment={comment} />
+              ))}
           </section>
         </article>
       ) : (
