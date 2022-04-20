@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Button from '../components/Button';
 import BlogCard from '../components/BlogCard';
+import Spinner from '../components/Spinner';
+import { useBlog } from '../contexts/blogContext';
 import { getBlogs } from '../api/blogService';
 import styled from 'styled-components';
 
@@ -8,14 +10,21 @@ import { AiOutlineArrowDown } from 'react-icons/ai';
 import web from '../assets/web.png';
 
 function Home() {
-  const [blogs, setBlogs] = useState([]);
+  const [{ blogs, isLoading }, dispatch] = useBlog();
 
   useEffect(() => {
-    getBlogs().then((data) => {
-      const publishedBlogs = data.blogs.filter((blog) => blog.published);
-      setBlogs(publishedBlogs);
-    });
-  }, []);
+    if (!blogs.length) {
+      dispatch({ type: 'LOADING' });
+      getBlogs().then((data) => {
+        const publishedBlogs = data.blogs.filter((blog) => blog.published);
+        dispatch({ type: 'FETCH_BLOGS', blogs: publishedBlogs });
+      });
+    }
+  }, [blogs, dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <StyledContainer>
@@ -62,6 +71,10 @@ const StyledContainer = styled.main`
       width: 50%;
       text-align: left;
       animation: fadeIn 1s ease-in-out;
+
+      button {
+        animation: fadeIn 2s ease;
+      }
     }
 
     @keyframes fadeIn {
