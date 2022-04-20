@@ -8,7 +8,7 @@ const getBlogs = async () => {
     const response = await axios.get(API_URL);
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -17,7 +17,7 @@ const getBlogDetails = async (id) => {
     const response = await axios.get(API_URL + id);
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

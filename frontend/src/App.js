@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Blog from './pages/Blog';
 import { AuthProvider } from './contexts/authContext';
+import { BlogProvider } from './contexts/blogContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './styles/Global';
@@ -27,12 +28,14 @@ function App() {
           <GlobalStyles />
           <AuthProvider>
             <Header />
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/blogs/:blogid' element={<Blog />} />
-            </Routes>
+            <BlogProvider>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/blogs/:blogid' element={<Blog />} />
+              </Routes>
+            </BlogProvider>
           </AuthProvider>
         </ThemeProvider>
       </Router>
