@@ -13,6 +13,10 @@ function Home() {
   const [{ blogs, isLoading }, dispatch] = useBlog();
 
   useEffect(() => {
+    document.title = 'Blog Envee';
+  }, []);
+
+  useEffect(() => {
     if (!blogs.length) {
       dispatch({ type: 'LOADING' });
       getBlogs().then((data) => {

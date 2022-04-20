@@ -1,9 +1,10 @@
 const wrapAsync = require('../utils/wrapAsync');
 const Blog = require('../models/blog');
-const Comment = require('../models/comment');
 
 exports.blogs_list = wrapAsync(async (req, res) => {
-  const blogs = await Blog.find().sort({ updatedAt: 'desc' });
+  const blogs = await Blog.find()
+    .populate('comments')
+    .sort({ updatedAt: 'desc' });
 
   res.json({ blogs });
 });
