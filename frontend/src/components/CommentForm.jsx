@@ -28,7 +28,6 @@ function CommentForm({ blogid }) {
     }
 
     createComment(blogid, comment).then((blogs) => {
-      console.log(blogs);
       dispatch({ type: 'FETCH_BLOGS', blogs });
       setComment({ username: '', content: '', blogid });
     });

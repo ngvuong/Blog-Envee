@@ -3,9 +3,8 @@ import Form from '../components/Form';
 import Button from '../components/Button';
 import Error from '../components/Error';
 import { useAuth } from '../contexts/authContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { login } from '../api/authService';
-
 import { AiOutlineLogin } from 'react-icons/ai';
 
 function Login() {
@@ -19,6 +18,7 @@ function Login() {
   const { email, password } = formData;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     document.title = 'Login';
@@ -26,9 +26,9 @@ function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate(location?.state.from || '/');
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, location]);
 
   useEffect(() => {
     if (error) {

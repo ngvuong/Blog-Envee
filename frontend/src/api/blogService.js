@@ -22,4 +22,20 @@ const createComment = async (blogid, comment) => {
   }
 };
 
-export { getBlogs, createComment };
+const deleteComment = async (blogid, commentid, token) => {
+  const configs = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    await axios.delete(`${API_URL}${blogid}/comments/${commentid}`, configs);
+    const data = await getBlogs();
+    return data.blogs;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getBlogs, createComment, deleteComment };

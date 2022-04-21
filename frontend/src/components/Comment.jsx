@@ -1,7 +1,19 @@
+import { deleteComment } from '../api/blogService';
+import { useBlog } from '../contexts/blogContext';
+import { useAuth } from '../contexts/authContext';
 import { parseISO, formatDistance } from 'date-fns';
 import styled from 'styled-components';
 
-function Comment({ comment }) {
+function Comment({ comment, blogid }) {
+  const [{ user }] = useAuth();
+  const [, dispatch] = useBlog();
+
+  const onDelete = () => {
+    deleteComment(blogid, comment._id, user.token).then((blogs) => {
+      dispatch({ type: 'FETCH_BLOGS', blogs });
+    });
+  };
+
   return (
     <StyledComment>
       <p>{comment.content}</p>
@@ -12,6 +24,7 @@ function Comment({ comment }) {
           { addSuffix: true }
         )}`}
       </p>
+      {user && user.admin && <button onClick={onDelete}>Delete</button>}
     </StyledComment>
   );
 }

@@ -1,6 +1,6 @@
 import { useAuth } from '../contexts/authContext';
 import { logout } from '../api/authService';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -13,6 +13,8 @@ import envee from '../assets/envee.svg';
 
 function Header() {
   const [{ isAuthenticated, user }, dispatch] = useAuth();
+
+  const location = useLocation();
 
   const onLogout = () => {
     dispatch({ type: 'LOGOUT' });
@@ -46,7 +48,7 @@ function Header() {
           ) : (
             <>
               <li>
-                <Link to='/login'>
+                <Link to='/login' state={{ from: location }}>
                   {' '}
                   <AiOutlineLogin /> Login
                 </Link>
