@@ -9,17 +9,7 @@ exports.blogs_list = wrapAsync(async (req, res) => {
   res.json({ blogs });
 });
 
-exports.blog_detail = wrapAsync(async (req, res) => {
-  const blog = await Blog.findById(req.params.id).populate('comments');
-
-  res.json({ blog });
-});
-
-exports.blog_create_get = function (req, res) {
-  res.json({ 'Create blog': 'Here will be the form to create a blog' });
-};
-
-exports.blog_create_post = wrapAsync(async (req, res) => {
+exports.blog_create = wrapAsync(async (req, res) => {
   const { title, content, author, image, topics, published } = req.body;
   const topicsArr = [
     ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),

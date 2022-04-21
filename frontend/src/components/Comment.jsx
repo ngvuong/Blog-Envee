@@ -1,3 +1,4 @@
+import Button from './Button';
 import { deleteComment } from '../api/blogService';
 import { useBlog } from '../contexts/blogContext';
 import { useAuth } from '../contexts/authContext';
@@ -24,7 +25,11 @@ function Comment({ comment, blogid }) {
           { addSuffix: true }
         )}`}
       </p>
-      {user && user.admin && <button onClick={onDelete}>Delete</button>}
+      {user && user.admin && (
+        <Button background='#A00' onClick={onDelete}>
+          Delete
+        </Button>
+      )}
     </StyledComment>
   );
 }
@@ -40,8 +45,13 @@ const StyledComment = styled.div`
     padding: 0.5rem 0;
   }
 
-  p:last-child {
+  p:last-of-type {
     font-size: 1.2rem;
+  }
+
+  button {
+    display: block;
+    margin-left: auto;
   }
 `;
 

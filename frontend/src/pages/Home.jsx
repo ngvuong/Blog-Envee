@@ -64,6 +64,7 @@ function Home() {
 
 const StyledContainer = styled.main`
   padding: 5rem;
+  overflow: auto;
 
   section:first-child {
     display: flex;

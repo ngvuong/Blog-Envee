@@ -1,5 +1,5 @@
 import Button from './Button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/authContext';
 import { useBlog } from '../contexts/blogContext';
 import { createComment } from '../api/blogService';
@@ -16,6 +16,12 @@ function CommentForm({ blogid }) {
 
   const { username, content } = comment;
 
+  useEffect(() => {
+    if (!user) {
+      setComment({ username: '', content: '' });
+    }
+  }, [user]);
+
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -29,7 +35,7 @@ function CommentForm({ blogid }) {
 
     createComment(blogid, comment).then((blogs) => {
       dispatch({ type: 'FETCH_BLOGS', blogs });
-      setComment({ username: '', content: '', blogid });
+      setComment({ username: '', content: '' });
     });
   };
 
