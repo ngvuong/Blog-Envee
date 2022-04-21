@@ -42,11 +42,9 @@ function Blog() {
         <article>
           <div>
             <h1>{blog.title}</h1>
+            <p>{`Posted by ${blog.author}`}</p>
             <p>
-              {`Posted by ${blog.author} on ${format(
-                parseISO(blog.createdAt),
-                'MMMM do, yyyy'
-              )}`}
+              {format(parseISO(blog.createdAt), 'MMMM do, yyyy')}
               {blog.createdAt !== blog.updatedAt ? (
                 <>
                   {' '}
@@ -68,11 +66,9 @@ function Blog() {
           <section>
             <h2>Discussion ({blog.comments.length})</h2>
             <CommentForm blogid={blogid} />
-            {blog.comments
-              .sort((c1, c2) => c2.createdAt > c1.createdAt)
-              .map((comment) => (
-                <Comment key={comment._id} comment={comment} />
-              ))}
+            {blog.comments.map((comment) => (
+              <Comment key={comment._id} comment={comment} blogid={blogid} />
+            ))}
           </section>
         </article>
       ) : (
@@ -92,13 +88,14 @@ const StyledContainer = styled.main`
     gap: 5rem;
     width: 70%;
     margin: 0 auto;
+    font-size: clamp(1.6rem, 2.5vw, 1.8rem);
 
     div {
       text-align: left;
 
       h1 {
         display: block;
-        font-size: 4rem;
+        font-size: min(1.875em, 40px);
         text-transform: capitalize;
         text-align: left;
         line-height: 1.2;
@@ -112,7 +109,7 @@ const StyledContainer = styled.main`
 
     img {
       width: 100%;
-      height: 50rem;
+      height: clamp(25rem, 40vw, 50rem);
       object-fit: cover;
     }
 
@@ -136,6 +133,14 @@ const StyledContainer = styled.main`
       h2 {
         text-align: left;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+    article {
+      gap: 3rem;
+      width: 100%;
     }
   }
 `;

@@ -9,7 +9,6 @@ const errorHandler = require('./utils/errorHandler');
 
 const blogRouter = require('./routes/blogRoutes');
 const userRouter = require('./routes/userRoutes');
-const commentRouter = require('./routes/commentRoutes');
 
 const app = express();
 
@@ -24,7 +23,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
-app.use('/api/comments', commentRouter);
 
 app.use(errorHandler);
 

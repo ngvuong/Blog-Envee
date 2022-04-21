@@ -12,13 +12,14 @@ const getBlogs = async () => {
   }
 };
 
-const getBlogDetails = async (id) => {
+const createComment = async (blogid, comment) => {
   try {
-    const response = await axios.get(API_URL + id);
-    return response.data;
+    await axios.post(`${API_URL}${blogid}/comments`, comment);
+    const data = await getBlogs();
+    return data.blogs;
   } catch (error) {
     console.error(error);
   }
 };
 
-export { getBlogs, getBlogDetails };
+export { getBlogs, createComment };

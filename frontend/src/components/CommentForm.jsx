@@ -1,8 +1,8 @@
+import Button from './Button';
 import { useState } from 'react';
 import { useAuth } from '../contexts/authContext';
 import { useBlog } from '../contexts/blogContext';
-import { getBlogs } from '../api/blogService';
-import axios from 'axios';
+import { createComment } from '../api/blogService';
 import styled from 'styled-components';
 
 function CommentForm({ blogid }) {
@@ -11,7 +11,6 @@ function CommentForm({ blogid }) {
   const [comment, setComment] = useState({
     username: user ? user.username : '',
     content: '',
-    blogid,
   });
   const [errors, setErrors] = useState({ username: '', content: '' });
 
@@ -28,11 +27,10 @@ function CommentForm({ blogid }) {
       return;
     }
 
-    axios.post('/api/comments', comment).then(() => {
-      getBlogs().then((data) => {
-        dispatch({ type: 'FETCH_BLOGS', blogs: data.blogs });
-        setComment({ username: '', content: '', blogid });
-      });
+    createComment(blogid, comment).then((blogs) => {
+      console.log(blogs);
+      dispatch({ type: 'FETCH_BLOGS', blogs });
+      setComment({ username: '', content: '', blogid });
     });
   };
 
@@ -59,9 +57,15 @@ function CommentForm({ blogid }) {
         required
       ></textarea>
       {errors.content && <p role='alert'>{errors.content}</p>}
-      <button type='submit' onClick={onSubmit} disabled={!username || !content}>
+      <Button
+        type='submit'
+        color='#303030'
+        background='#f7f7f7'
+        onClick={onSubmit}
+        disabled={!username || !content}
+      >
         Submit
-      </button>
+      </Button>
     </StyledCommentForm>
   );
 }
@@ -75,13 +79,17 @@ const StyledCommentForm = styled.form`
   input,
   textarea {
     min-height: 4rem;
-    border: 1px solid #ccc;
+    border: 1px solid #4e555a;
     resize: vertical;
   }
 
   p {
-    color: #f00;
+    color: #d00;
     margin-top: -2rem;
+  }
+
+  button {
+    align-self: flex-end;
   }
 
   button:disabled {
