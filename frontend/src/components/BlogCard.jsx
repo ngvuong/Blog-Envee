@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 
-function BlogCard({ blog }) {
+function BlogCard({ blog, edit }) {
   return (
-    <StyledArticle>
-      <Link to={`blogs/${blog._id}`}>
+    <StyledArticle blog={blog} edit={edit}>
+      <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`}>
         <img src={blog.image} alt='blog post placeholder' />
         <h3>{blog.title}</h3>
         <p>{format(parseISO(blog.createdAt), 'MMMM do, yyyy')}</p>
@@ -23,7 +23,10 @@ const StyledArticle = styled.article`
   flex: 1 1 30rem;
   box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
   padding-bottom: 2rem;
-
+  /* border: 2px double
+    ${(blog, edit) => (edit && blog.published ? '#1a77bb' : '#ccc')}; */
+  border: ${({ blog, edit }) =>
+    edit ? console.log('edit') : console.log('not edit')};
   a,
   a:link,
   a:visited {
@@ -66,6 +69,12 @@ const StyledArticle = styled.article`
       background-color: #41555f;
       padding: 0 0.5rem;
       border-radius: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    img {
+      height: 50vw;
     }
   }
 `;

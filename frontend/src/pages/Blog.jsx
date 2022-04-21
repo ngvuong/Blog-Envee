@@ -88,14 +88,13 @@ const StyledContainer = styled.main`
     gap: 5rem;
     width: 70%;
     margin: 0 auto;
-    font-size: clamp(1.6rem, 2.5vw, 1.8rem);
+    font-size: clamp(1.6rem, 3vw, 1.8rem);
 
     div {
       text-align: left;
 
       h1 {
         display: block;
-        font-size: min(1.875em, 40px);
         text-transform: capitalize;
         text-align: left;
         line-height: 1.2;

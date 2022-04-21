@@ -36,7 +36,9 @@ function Header() {
           {isAuthenticated ? (
             <>
               <li>
-                <AiOutlineUser /> {user.username}
+                <Link to='/dashboard'>
+                  <AiOutlineUser /> {user.username}
+                </Link>
               </li>
               <li>
                 <button onClick={onLogout}>

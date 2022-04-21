@@ -3,6 +3,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Blog from './pages/Blog';
+import Dashboard from './pages/Dashboard';
+import Editor from './pages/Editor';
+import BlogEdit from './pages/BlogEdit';
+import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/authContext';
 import { BlogProvider } from './contexts/blogContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -31,9 +35,15 @@ function App() {
             <BlogProvider>
               <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/register' element={<Register />} />
-                <Route path='/blogs/:blogid' element={<Blog />} />
+                <Route path='login' element={<Login />} />
+                <Route path='register' element={<Register />} />
+                <Route path='blogs/:blogid' element={<Blog />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path='dashboard' element={<Dashboard />} />
+                  <Route path='editor' element={<Editor />} />
+                  <Route path='blogs/:blogid/edit' element={<BlogEdit />} />
+                </Route>
+                <Route path='*' element={<h1>Are you lost?</h1>} />
               </Routes>
             </BlogProvider>
           </AuthProvider>

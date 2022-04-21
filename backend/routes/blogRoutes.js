@@ -8,7 +8,7 @@ const commentController = require('../controllers/commentController');
 router
   .route('/')
   .get(blogController.blogs_list)
-  .post(blogController.blog_create);
+  .post(authenticateAdmin, blogController.blog_create);
 
 router
   .route('/:id')

@@ -54,7 +54,7 @@ const GlobalStyles = createGlobalStyle`
     justify-content: center;
     align-items: center;
     gap: .5rem;
-    font-size: 3rem;
+    font-size: clamp(3rem, 4vw, 4rem);
     margin: 2rem 0;
   }
 

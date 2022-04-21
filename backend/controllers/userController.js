@@ -54,7 +54,6 @@ exports.user_register = [
         username,
         email,
         password: hashedPassword,
-        admin: true,
       });
       user.save((err) => {
         if (err) return next(err);
