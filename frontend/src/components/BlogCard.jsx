@@ -5,7 +5,7 @@ import { parseISO, format } from 'date-fns';
 function BlogCard({ blog, edit }) {
   return (
     <StyledArticle blog={blog} edit={edit}>
-      <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`}>
+      <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`} state={{ blog }}>
         <img src={blog.image} alt='blog post placeholder' />
         <h3>{blog.title}</h3>
         <p>{format(parseISO(blog.createdAt), 'MMMM do, yyyy')}</p>

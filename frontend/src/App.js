@@ -4,8 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Blog from './pages/Blog';
 import Dashboard from './pages/Dashboard';
-import Editor from './pages/Editor';
-import BlogEdit from './pages/BlogEdit';
+import BlogEditor from './pages/BlogEditor';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/authContext';
 import { BlogProvider } from './contexts/blogContext';
@@ -40,8 +39,8 @@ function App() {
                 <Route path='blogs/:blogid' element={<Blog />} />
                 <Route element={<ProtectedRoute redirectPath='/login' />}>
                   <Route path='dashboard' element={<Dashboard />} />
-                  <Route path='editor' element={<Editor />} />
-                  <Route path='blogs/:blogid/edit' element={<BlogEdit />} />
+                  <Route path='editor' element={<BlogEditor />} />
+                  <Route path='blogs/:blogid/edit' element={<BlogEditor />} />
                 </Route>
                 <Route path='*' element={<h1>Are you lost?</h1>} />
               </Routes>
