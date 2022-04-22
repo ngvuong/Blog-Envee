@@ -26,7 +26,7 @@ function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(location?.state.from || '/');
+      navigate(location?.state?.from || '/');
     }
   }, [navigate, isAuthenticated, location]);
 

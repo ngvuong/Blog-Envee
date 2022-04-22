@@ -99,7 +99,7 @@ const StyledCommentForm = styled.form`
 
   button:disabled {
     opacity: 0.5;
-    cursor: default;
+    cursor: not-allowed;
   }
 `;
 

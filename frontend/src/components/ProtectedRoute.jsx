@@ -1,11 +1,12 @@
 import { useAuth } from '../contexts/authContext';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 function ProtectedRoute({ redirectPath = '/', children }) {
   const [{ user }] = useAuth();
+  const location = useLocation();
 
   if (!user?.admin) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={redirectPath} replace state={{ from: location }} />;
   }
 
   return children ? children : <Outlet />;
