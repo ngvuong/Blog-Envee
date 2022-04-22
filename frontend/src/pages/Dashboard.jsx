@@ -1,30 +1,43 @@
 import { useState, useEffect } from 'react';
 import BlogCard from '../components/BlogCard';
 import Button from '../components/Button';
+import Spinner from '../components/Spinner';
 import { getBlogs } from '../api/blogService';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 function Dashboard() {
   const [blogs, setBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = 'Dashboard';
+  }, []);
 
   useEffect(() => {
     if (!blogs.length) {
       getBlogs().then((data) => {
         setBlogs(data.blogs);
+        setIsLoading(false);
       });
     }
   }, [blogs]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <StyledContainer>
       <h1>Envee Dashboard</h1>
       <section>
         <h2>
-          <span>Edit Blogs</span>
-          <Button background='#1a77bb' tabIndex='-1'>
-            <Link to='/editor'>New Blog</Link>
-          </Button>
+          <span>Edit Blogs ({blogs.length})</span>
+          <Link to='/editor'>
+            <Button background='#1a77bb' tabIndex='-1'>
+              New Blog
+            </Button>
+          </Link>
         </h2>
         <div>
           {blogs.map((blog) => (
@@ -46,7 +59,6 @@ const StyledContainer = styled.main`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      text-align: left;
       margin-bottom: 2rem;
     }
 
@@ -59,8 +71,8 @@ const StyledContainer = styled.main`
     }
 
     div {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 4rem 2rem;
     }
   }

@@ -13,6 +13,7 @@ function Home() {
   const [{ blogs, isLoading }, dispatch] = useBlog();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.title = 'Blog Envee';
   }, []);
 
@@ -41,11 +42,11 @@ function Home() {
             technologies and everything web. Join in on the discussion and share
             your thoughts on your favorite content.
           </p>
-          <Button tabIndex='-1' background='#d9d9d9'>
-            <a href='#blogs'>
+          <a href='#blogs'>
+            <Button tabIndex='-1' background='#d9d9d9'>
               Read Now <AiOutlineArrowDown />
-            </a>
-          </Button>
+            </Button>
+          </a>
         </div>
         <img src={web} alt='web technologies' draggable='false' />
       </section>
@@ -71,13 +72,31 @@ const StyledContainer = styled.main`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10rem;
+    font-size: clamp(1.6rem, 2.5vw, 2rem);
 
     div {
       width: 50%;
       text-align: left;
       animation: fadeIn 1s ease-in-out;
 
+      a {
+        color: #252525;
+      }
+
+      a:focus button {
+        border-radius: 0.5rem;
+        outline: 2px solid ${({ theme }) => theme.colors.gold_secondary};
+        outline-offset: 0.5rem;
+      }
+
+      a:focus-visible {
+        outline: none;
+      }
+
       button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         animation: fadeIn 2s ease;
       }
     }
@@ -96,13 +115,12 @@ const StyledContainer = styled.main`
 
     h1 {
       display: block;
-      font-size: 4rem;
+      font-size: clamp(3.5rem, 4vw, 4.5rem);
       text-align: left;
       margin: 1rem 0;
     }
 
     p {
-      font-size: 2rem;
       margin-bottom: 1rem;
     }
 
@@ -122,19 +140,6 @@ const StyledContainer = styled.main`
         transform: scale(1);
       }
     }
-
-    a {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: #252525;
-    }
-
-    a:focus {
-      border-radius: 0.5rem;
-      outline: 2px solid ${({ theme }) => theme.colors.gold_secondary};
-      outline-offset: 1.2rem;
-    }
   }
 
   section:last-child {
@@ -142,6 +147,7 @@ const StyledContainer = styled.main`
 
     h2 {
       font-size: 3rem;
+      text-align: left;
       margin: 5rem 0;
     }
 

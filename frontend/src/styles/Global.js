@@ -23,7 +23,6 @@ const GlobalStyles = createGlobalStyle`
   @keyframes hideScroll {
     from, to { 
       overflow-x: hidden;
-      overflow-y: scroll; 
     }
   }
 

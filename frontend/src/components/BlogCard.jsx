@@ -23,10 +23,12 @@ const StyledArticle = styled.article`
   flex: 1 1 30rem;
   box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
   padding-bottom: 2rem;
-  /* border: 2px double
-    ${(blog, edit) => (edit && blog.published ? '#1a77bb' : '#ccc')}; */
   border: ${({ blog, edit }) =>
-    edit ? console.log('edit') : console.log('not edit')};
+    edit
+      ? blog.published
+        ? '2px double #1abb5a'
+        : '2px double #bb2626'
+      : 'none'};
   a,
   a:link,
   a:visited {
@@ -41,7 +43,7 @@ const StyledArticle = styled.article`
 
   img {
     width: 100%;
-    height: 30vw;
+    height: 25vw;
     object-fit: cover;
     border-radius: 0.5rem;
     transition: all 0.25s cubic-bezier(0.5, 0, 0.5, 1);
