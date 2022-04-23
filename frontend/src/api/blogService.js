@@ -12,6 +12,20 @@ const getBlogs = async () => {
   }
 };
 
+const createBlog = async (blog, token) => {
+  const configs = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    await axios.post(API_URL, blog, configs);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const createComment = async (blogid, comment) => {
   try {
     await axios.post(`${API_URL}${blogid}/comments`, comment);
@@ -38,4 +52,4 @@ const deleteComment = async (blogid, commentid, token) => {
   }
 };
 
-export { getBlogs, createComment, deleteComment };
+export { getBlogs, createBlog, createComment, deleteComment };
