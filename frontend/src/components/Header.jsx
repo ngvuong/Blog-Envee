@@ -81,7 +81,7 @@ const StyledHeader = styled.header`
   border-radius: 1rem;
   margin: 1rem 2rem;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 2;
 
   div {
     font-size: 3.2rem;

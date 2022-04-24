@@ -20,7 +20,7 @@ const StyledForm = styled.form`
     margin: 0 auto;
   }
 
-  div {
+  & > div {
     display: flex;
     flex-direction: column;
   }

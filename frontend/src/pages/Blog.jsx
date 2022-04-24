@@ -1,36 +1,39 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useBlog } from '../contexts/blogContext';
-import { getBlogs } from '../api/blogService';
+import styled from 'styled-components';
 import Spinner from '../components/Spinner';
 import Comment from '../components/Comment';
-import styled from 'styled-components';
-import { parseISO, format } from 'date-fns';
 import CommentForm from '../components/CommentForm';
+import { useBlog } from '../contexts/blogContext';
+import { getBlogs } from '../api/blogService';
+import { useParams, useLocation } from 'react-router-dom';
+import { parseISO, format } from 'date-fns';
 
 function Blog() {
-  const [blog, setBlog] = useState();
+  const location = useLocation();
+  const [blog, setBlog] = useState(location?.state?.blog || null);
   const [notFound, setNotFound] = useState(false);
   const [{ blogs, isLoading }, dispatch] = useBlog();
   const { blogid } = useParams();
 
   useEffect(() => {
-    if (!blogs.length) {
-      dispatch({ type: 'LOADING' });
-      getBlogs().then((data) => {
-        const publishedBlogs = data.blogs.filter((blog) => blog.published);
-        dispatch({ type: 'FETCH_BLOGS', blogs: publishedBlogs });
-      });
-    } else {
-      setBlog(() => {
-        const blog = blogs.find((blog) => blog._id === blogid);
-        if (!blog) setNotFound(true);
-        document.title =
-          blog.title.replace(/\b\w/g, (l) => l.toUpperCase()) || 'Blog Envee';
-        return blog;
-      });
+    if (!blog) {
+      if (!blogs.length) {
+        dispatch({ type: 'LOADING' });
+        getBlogs().then((data) => {
+          const publishedBlogs = data.blogs.filter((blog) => blog.published);
+          dispatch({ type: 'FETCH_BLOGS', blogs: publishedBlogs });
+        });
+      } else {
+        setBlog(() => {
+          const blog = blogs.find((blog) => blog._id === blogid);
+          if (!blog) setNotFound(true);
+          document.title =
+            blog.title.replace(/\b\w/g, (l) => l.toUpperCase()) || 'Blog Envee';
+          return blog;
+        });
+      }
     }
-  }, [blogid, blogs, dispatch]);
+  }, [blog, blogid, blogs, dispatch]);
 
   if (isLoading) {
     return <Spinner />;
@@ -62,7 +65,7 @@ function Blog() {
               <li key={topic}>{topic}</li>
             ))}
           </ul>
-          <section>{blog.content}</section>
+          <section dangerouslySetInnerHTML={{ __html: blog.content }}></section>
           <section>
             <h2>Discussion ({blog.comments.length})</h2>
             <CommentForm blogid={blogid} />
