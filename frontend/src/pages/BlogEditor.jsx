@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
 import Button from '../components/Button';
 import Form from '../components/Form';
 import { createBlog } from '../api/blogService';
@@ -6,7 +7,6 @@ import { useAuth } from '../contexts/authContext';
 import { Editor } from '@tinymce/tinymce-react';
 import { getBlogs } from '../api/blogService';
 import { useParams, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 
 function BlogEditor() {
   const [{ user }] = useAuth();
@@ -99,6 +99,7 @@ function BlogEditor() {
                 'searchreplace',
                 'visualblocks',
                 'code',
+                'codesample',
                 'fullscreen',
                 'insertdatetime',
                 'media',
@@ -111,7 +112,7 @@ function BlogEditor() {
                 'undo redo | blocks | ' +
                 'bold italic forecolor | alignleft aligncenter ' +
                 'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help | link image | code',
+                'removeformat | help | link image | code | codesample | fullscreen',
               content_style:
                 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
               toolbar_mode: 'sliding',

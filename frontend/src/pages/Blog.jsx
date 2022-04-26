@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
 import Spinner from '../components/Spinner';
 import Comment from '../components/Comment';
 import CommentForm from '../components/CommentForm';
@@ -34,6 +36,10 @@ function Blog() {
       }
     }
   }, [blog, blogid, blogs, dispatch]);
+
+  useEffect(() => {
+    Prism.highlightAll();
+  }, []);
 
   if (isLoading) {
     return <Spinner />;
