@@ -39,6 +39,7 @@ function Blog() {
 
   useEffect(() => {
     Prism.highlightAll();
+    window.scrollTo(0, 0);
   }, []);
 
   if (isLoading) {
@@ -95,7 +96,7 @@ const StyledContainer = styled.main`
     display: flex;
     flex-direction: column;
     gap: 5rem;
-    width: 70%;
+    width: 80%;
     margin: 0 auto;
     font-size: clamp(1.6rem, 3vw, 1.8rem);
 
@@ -137,6 +138,10 @@ const StyledContainer = styled.main`
 
     section {
       text-align: left;
+
+      p > code {
+        color: #ff55a5;
+      }
 
       h2 {
         text-align: left;

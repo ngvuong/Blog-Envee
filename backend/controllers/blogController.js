@@ -19,8 +19,8 @@ exports.blog_create = wrapAsync(async (req, res) => {
     title,
     content,
     author,
-    image,
-    topics: topicsArr,
+    ...(image && { image }),
+    ...(topics && { topics: topicsArr }),
     published,
   });
 

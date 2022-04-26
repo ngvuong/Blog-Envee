@@ -68,7 +68,9 @@ function BlogEditor() {
       <h1>Blog Editor</h1>
       <Form>
         <div>
-          <label htmlFor='title'>Title</label>
+          <label htmlFor='title'>
+            Title<span>*</span>
+          </label>
           <input
             type='text'
             id='title'
@@ -88,6 +90,7 @@ function BlogEditor() {
               selector: 'textarea',
               height: 500,
               menubar: false,
+              skin: 'oxide-dark',
               plugins: [
                 'advlist',
                 'autolink',
@@ -97,7 +100,6 @@ function BlogEditor() {
                 'charmap',
                 'anchor',
                 'searchreplace',
-                'visualblocks',
                 'code',
                 'codesample',
                 'fullscreen',
@@ -112,9 +114,9 @@ function BlogEditor() {
                 'undo redo | blocks | ' +
                 'bold italic forecolor | alignleft aligncenter ' +
                 'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help | link image | code | codesample | fullscreen',
+                'removeformat | help | link | image | code | codesample | preview | fullscreen',
               content_style:
-                'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; background-color:#222f3e; color:#F7F7F7; }',
               toolbar_mode: 'sliding',
             }}
             textareaName='content'
