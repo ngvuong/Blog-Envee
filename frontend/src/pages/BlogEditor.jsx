@@ -4,8 +4,8 @@ import Button from '../components/Button';
 import Form from '../components/Form';
 import { createBlog } from '../api/blogService';
 import { useAuth } from '../contexts/authContext';
-import { Editor } from '@tinymce/tinymce-react';
 import { getBlogs } from '../api/blogService';
+import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useLocation } from 'react-router-dom';
 
 function BlogEditor() {
@@ -18,6 +18,8 @@ function BlogEditor() {
     topics: '',
     published: false,
   });
+  const [errors, setErrors] = useState({ title: '', content: '' });
+
   const { blogid } = useParams();
 
   const location = useLocation();
@@ -26,6 +28,7 @@ function BlogEditor() {
   const log = () => {
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
+      editorRef.current.focus();
     }
   };
 
@@ -60,13 +63,20 @@ function BlogEditor() {
   const onSave = (e) => {
     e.preventDefault();
     console.log(formData);
+    if (!title || !content) {
+      setErrors({
+        title: title ? '' : 'Title is required*',
+        content: content ? '' : 'Content is required*',
+      });
+      return;
+    }
     createBlog(formData, user.token);
   };
 
   return (
     <StyledContainer>
       <h1>Blog Editor</h1>
-      <Form>
+      <Form onSubmit={onSave}>
         <div>
           <label htmlFor='title'>
             Title<span>*</span>
@@ -79,16 +89,20 @@ function BlogEditor() {
             onChange={onChange}
             placeholder='Blog title'
             required
+            autoFocus
           />
+          {errors.title && <p role='alert'>{errors.title}</p>}
         </div>
         <div>
-          <label htmlFor='content'>Content</label>
+          <label htmlFor='content' onClick={log}>
+            Content<span>*</span>
+          </label>
           <Editor
             apiKey={process.env.REACT_APP_API_KEY}
             onInit={(evt, editor) => (editorRef.current = editor)}
             init={{
               selector: 'textarea',
-              height: 500,
+              height: 400,
               menubar: false,
               skin: 'oxide-dark',
               plugins: [
@@ -125,6 +139,7 @@ function BlogEditor() {
               onChange({ target: { name: 'content', value: content } })
             }
           />
+          {errors.content && <p role='alert'>{errors.content}</p>}
           <button type='button' onClick={log}>
             Log editor content
           </button>
@@ -162,7 +177,7 @@ function BlogEditor() {
             onChange={onChange}
           />
         </div>
-        <Button background='green' type='submit' onClick={onSave}>
+        <Button background='green' type='submit' disabled={!title || !content}>
           Save
         </Button>
       </Form>
@@ -175,6 +190,22 @@ const StyledContainer = styled.main`
 
   form {
     width: 70%;
+
+    #published {
+    }
+  }
+
+  p[role='alert'] {
+    color: #d00;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    form {
+      width: 100%;
+    }
   }
 `;
 

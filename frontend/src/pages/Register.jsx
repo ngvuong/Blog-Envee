@@ -94,7 +94,9 @@ function Register() {
             </Error>
           ) : null}
           <div>
-            <label htmlFor='username'>Username</label>
+            <label htmlFor='username'>
+              Username<span>*</span>
+            </label>
             <input
               type='text'
               name='username'
@@ -108,7 +110,9 @@ function Register() {
             />
           </div>
           <div>
-            <label htmlFor='email'>Email</label>
+            <label htmlFor='email'>
+              Email<span>*</span>
+            </label>
             <input
               type='email'
               name='email'
@@ -120,7 +124,9 @@ function Register() {
             />
           </div>
           <div>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='password'>
+              Password<span>*</span>
+            </label>
             <input
               type='password'
               onInput={onInputChange}
@@ -134,7 +140,9 @@ function Register() {
             />
           </div>
           <div>
-            <label htmlFor='passwordConfirmation'>Confirm Password</label>
+            <label htmlFor='passwordConfirmation'>
+              Confirm Password<span>*</span>
+            </label>
             <input
               type='password'
               className={validConfirm ? '' : 'invalid'}

@@ -40,7 +40,7 @@ function CommentForm({ blogid }) {
   };
 
   return (
-    <StyledCommentForm>
+    <StyledCommentForm onSubmit={onSubmit}>
       {!isAuthenticated && (
         <input
           type='text'
@@ -66,7 +66,6 @@ function CommentForm({ blogid }) {
         type='submit'
         color='#303030'
         background='#f7f7f7'
-        onClick={onSubmit}
         disabled={!username || !content}
       >
         Submit
@@ -95,11 +94,6 @@ const StyledCommentForm = styled.form`
 
   button {
     align-self: flex-end;
-  }
-
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
 `;
 

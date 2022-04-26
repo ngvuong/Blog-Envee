@@ -12,6 +12,11 @@ const StyledButton = styled.button`
   border-radius: 0.5rem;
   transition: all 0.25s cubic-bezier(0.5, 0, 0.5, 1);
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   &:hover:not(:disabled) {
     outline: 2px solid ${({ background }) => (background ? background : '#fff')};
     outline-offset: 2px;

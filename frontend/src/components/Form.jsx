@@ -17,7 +17,7 @@ const StyledForm = styled.form`
     width: 100%;
     height: 1px;
     background: #686868;
-    margin: 0 auto;
+    margin: 2rem auto;
   }
 
   & > div {
@@ -26,9 +26,14 @@ const StyledForm = styled.form`
   }
 
   label {
+    width: max-content;
     color: #ccc;
     font-weight: bold;
     text-align: left;
+
+    span {
+      color: #fc3e3e;
+    }
   }
 
   input,

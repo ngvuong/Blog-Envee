@@ -68,7 +68,9 @@ function Login() {
         <Form onSubmit={onSubmit}>
           {validationError && <Error>{validationError}</Error>}
           <div>
-            <label htmlFor='email'>Email</label>
+            <label htmlFor='email'>
+              Email<span>*</span>
+            </label>
             <input
               type='email'
               name='email'
@@ -81,7 +83,9 @@ function Login() {
             />
           </div>
           <div>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='password'>
+              Password<span>*</span>
+            </label>
             <input
               type='password'
               onInput={onInputChange}
