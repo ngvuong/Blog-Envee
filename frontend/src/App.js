@@ -40,7 +40,10 @@ function App() {
                 <Route element={<ProtectedRoute redirectPath='/login' />}>
                   <Route path='dashboard' element={<Dashboard />} />
                   <Route path='editor' element={<BlogEditor />} />
-                  <Route path='blogs/:blogid/edit' element={<BlogEditor />} />
+                  <Route
+                    path='blogs/:blogid/edit'
+                    element={<BlogEditor edit={true} />}
+                  />
                 </Route>
                 <Route path='*' element={<h1>Are you lost?</h1>} />
               </Routes>

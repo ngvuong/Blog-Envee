@@ -5,7 +5,7 @@ function ProtectedRoute({ redirectPath = '/', children }) {
   const [{ user }] = useAuth();
   const location = useLocation();
 
-  if (!user?.admin) {
+  if (!user) {
     return <Navigate to={redirectPath} replace state={{ from: location }} />;
   }
 

@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import BlogCard from '../components/BlogCard';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
+import { useAuth } from '../contexts/authContext';
 import { getBlogs } from '../api/blogService';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { AiFillEdit, AiFillMeh } from 'react-icons/ai';
 
 function Dashboard() {
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [{ user }] = useAuth();
 
   useEffect(() => {
     document.title = 'Dashboard';
   }, []);
 
   useEffect(() => {
-    if (!blogs.length) {
-      getBlogs().then((data) => {
-        setBlogs(data.blogs);
-        setIsLoading(false);
-      });
-    }
-  }, [blogs]);
+    getBlogs().then((data) => {
+      const foundBlogs = data.blogs.filter(
+        (blog) => blog.author === user.username
+      );
+      setBlogs(foundBlogs);
+      setIsLoading(false);
+    });
+  }, [user]);
 
   if (isLoading) {
     return <Spinner />;
@@ -29,10 +33,12 @@ function Dashboard() {
 
   return (
     <StyledContainer>
-      <h1>Envee Dashboard</h1>
+      <h1>{user.username} Dashboard</h1>
       <section>
         <h2>
-          <span>Edit Blogs ({blogs.length})</span>
+          <span>
+            <AiFillEdit /> Edit Blogs ({blogs.length})
+          </span>
           <Link to='/editor'>
             <Button background='#1a77bb' tabIndex='-1'>
               New Blog
@@ -43,6 +49,7 @@ function Dashboard() {
           {blogs.map((blog) => (
             <BlogCard key={blog._id} blog={blog} edit={true} />
           ))}
+          {!blogs.length && <AiFillMeh />}
         </div>
       </section>
     </StyledContainer>
@@ -60,6 +67,12 @@ const StyledContainer = styled.main`
       justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
     }
 
     button {
@@ -72,8 +85,14 @@ const StyledContainer = styled.main`
 
     div {
       display: flex;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 4rem 2rem;
+
+      svg {
+        color: #ffcc20;
+        font-size: 5rem;
+      }
     }
   }
 `;

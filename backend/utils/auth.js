@@ -8,7 +8,9 @@ const authenticateUser = (req, res, next) => {
 
 const authenticateAdmin = (req, res, next) => {
   passport.authenticate('jwt', { session: false })(req, res, () => {
+    console.log(req.user);
     if (req.user && req.user.admin) return next();
+    return next(new Error('You are not authorized to perform this action'));
   });
 };
 

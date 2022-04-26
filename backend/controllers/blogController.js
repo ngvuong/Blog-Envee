@@ -43,11 +43,11 @@ exports.blog_create = [
 ];
 
 exports.blog_update = wrapAsync(async (req, res) => {
-  const { title, content, image, published } = req.body;
+  const { title, content, image, topics, published } = req.body;
 
   const blog = await Blog.findByIdAndUpdate(
     req.params.id,
-    { title, content, image, published },
+    { title, content, image, topics, published },
     { new: true }
   );
 

@@ -8,11 +8,12 @@ import { useAuth } from '../contexts/authContext';
 import { useBlog } from '../contexts/blogContext';
 import { getBlogs } from '../api/blogService';
 import { Editor } from '@tinymce/tinymce-react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
-function BlogEditor() {
+function BlogEditor(edit) {
   const [{ user }] = useAuth();
   const [, dispatch] = useBlog();
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -27,6 +28,8 @@ function BlogEditor() {
 
   const location = useLocation();
 
+  const navigate = useNavigate();
+
   const editorRef = useRef(null);
   const log = () => {
     if (editorRef.current) {
@@ -34,20 +37,28 @@ function BlogEditor() {
       editorRef.current.focus();
     }
   };
+  useEffect(() => {
+    if (user.username !== formData.author) {
+      navigate('/');
+    }
+  }, [user, formData, navigate]);
 
   useEffect(() => {
     if (location?.state?.blog) {
       const { title, content, author, image, topics, published } =
         location.state.blog;
       setFormData({ title, content, author, image, topics, published });
+      setIsLoading(false);
     } else if (blogid) {
       getBlogs().then((data) => {
         const { title, content, author, image, topics, published } =
           data.blogs.find((blog) => blog._id === blogid);
         setFormData({ title, content, author, image, topics, published });
+        setIsLoading(false);
       });
     }
-  }, [blogid, location]);
+    setIsLoading(false);
+  }, [blogid, location, navigate, user]);
 
   const { title, content, image, topics, published } = formData;
 
@@ -76,6 +87,10 @@ function BlogEditor() {
     }
     createBlog(formData, user.token).then(() => dispatch({ type: 'RESET' }));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <StyledContainer>
@@ -144,9 +159,6 @@ function BlogEditor() {
             }
           />
           {errors.content && <p role='alert'>{errors.content}</p>}
-          <button type='button' onClick={log}>
-            Log editor content
-          </button>
         </div>
         <div>
           <label htmlFor='image'>Image</label>
