@@ -1,3 +1,4 @@
+const { body, validationResult } = require('express-validator');
 const wrapAsync = require('../utils/wrapAsync');
 const Blog = require('../models/blog');
 
@@ -9,23 +10,37 @@ exports.blogs_list = wrapAsync(async (req, res) => {
   res.json({ blogs });
 });
 
-exports.blog_create = wrapAsync(async (req, res) => {
-  const { title, content, author, image, topics, published } = req.body;
-  const topicsArr = [
-    ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
-  ];
+exports.blog_create = [
+  body('title', 'Title is required').trim().notEmpty().escape(),
+  body('content', 'Content is required').trim().notEmpty(),
+  body('image').trim().escape(),
+  body('topics').trim().escape(),
+  wrapAsync(async (req, res) => {
+    const { title, content, author, image, topics, published } = req.body;
+    const topicsArr = [
+      ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
+    ];
 
-  const blog = await Blog.create({
-    title,
-    content,
-    author,
-    ...(image && { image }),
-    ...(topics && { topics: topicsArr }),
-    published,
-  });
+    const errors = validationResult(req);
 
-  res.json({ blog });
-});
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+
+    const blog = await Blog.create({
+      title,
+      content,
+      author,
+      ...(image && { image }),
+      ...(topics && { topics: topicsArr }),
+      published,
+    });
+
+    res.json({ blog });
+  }),
+];
 
 exports.blog_update = wrapAsync(async (req, res) => {
   const { title, content, image, published } = req.body;

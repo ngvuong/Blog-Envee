@@ -159,6 +159,14 @@ function Register() {
           <Button
             type='submit'
             background='#4c636e'
+            disabled={
+              validationError ||
+              !validConfirm ||
+              !username ||
+              !email ||
+              !password ||
+              !passwordConfirmation
+            }
             style={{ marginTop: '1rem' }}
           >
             Sign up

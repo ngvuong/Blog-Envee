@@ -101,6 +101,7 @@ function Login() {
           <Button
             type='submit'
             background='#4c636e'
+            disabled={!email || !password}
             style={{ marginTop: '1rem' }}
           >
             Log in

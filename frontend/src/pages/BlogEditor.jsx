@@ -2,14 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
 import Form from '../components/Form';
+import Spinner from '../components/Spinner';
 import { createBlog } from '../api/blogService';
 import { useAuth } from '../contexts/authContext';
+import { useBlog } from '../contexts/blogContext';
 import { getBlogs } from '../api/blogService';
 import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useLocation } from 'react-router-dom';
 
 function BlogEditor() {
   const [{ user }] = useAuth();
+  const [, dispatch] = useBlog();
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -65,12 +68,13 @@ function BlogEditor() {
     console.log(formData);
     if (!title || !content) {
       setErrors({
-        title: title ? '' : 'Title is required*',
-        content: content ? '' : 'Content is required*',
+        title: title ? '' : '*Title is required',
+        content: content ? '' : '*Content is required',
       });
+      window.scrollTo(0, 0);
       return;
     }
-    createBlog(formData, user.token);
+    createBlog(formData, user.token).then(() => dispatch({ type: 'RESET' }));
   };
 
   return (
@@ -168,14 +172,17 @@ function BlogEditor() {
         </div>
         <div>
           <label htmlFor='published'>Publish</label>
-          <input
-            type='checkbox'
-            id='published'
-            name='published'
-            checked={published}
-            value={published}
-            onChange={onChange}
-          />
+          <label htmlFor='published'>
+            <input
+              type='checkbox'
+              id='published'
+              name='published'
+              checked={published}
+              value={published}
+              onChange={onChange}
+            />
+            <span></span>
+          </label>
         </div>
         <Button background='green' type='submit' disabled={!title || !content}>
           Save
@@ -191,7 +198,61 @@ const StyledContainer = styled.main`
   form {
     width: 70%;
 
-    #published {
+    label[for='published']:last-of-type {
+      position: relative;
+      display: inline-block;
+      width: 6rem;
+      height: 3.4rem;
+      text-align: center;
+
+      input {
+        width: 0;
+        height: 0;
+        opacity: 0;
+      }
+
+      span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        color: #fc3e3e;
+        font-size: 2rem;
+        background-color: #505a5a;
+        border-radius: 3rem;
+        transition: all 0.5s;
+      }
+
+      input:checked + span {
+        background-color: #2299ff;
+      }
+
+      span::before {
+        content: '✖';
+        position: absolute;
+        left: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.6rem;
+        height: 2.6rem;
+        background-color: #b7c5c5;
+        border-radius: 50%;
+        transition: all 0.5s;
+      }
+
+      input:checked + span::before {
+        content: '✔';
+        color: #228822;
+        transform: translateX(2.6rem);
+      }
+
+      input:focus + span {
+        box-shadow: 0 0 2px 2px #ffcc20;
+      }
     }
   }
 
