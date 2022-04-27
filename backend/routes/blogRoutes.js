@@ -14,6 +14,10 @@ router
   .get(blogController.blogs_list)
   .post(authenticateUser, blogController.blog_create);
 
+router.route('/user').get(authenticateUser, blogController.user_blogs);
+
+router.route('/admin').get(authenticateAdmin, blogController.admin_blogs);
+
 router
   .route('/:id')
   .put(authenticateAuthor, blogController.blog_update)

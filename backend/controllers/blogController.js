@@ -3,7 +3,23 @@ const wrapAsync = require('../utils/wrapAsync');
 const Blog = require('../models/blog');
 
 exports.blogs_list = wrapAsync(async (req, res) => {
-  const blogs = await Blog.find()
+  const blogs = await Blog.find({ published: true })
+    .populate('comments')
+    .sort({ updatedAt: 'desc' });
+
+  res.json({ blogs });
+});
+
+exports.user_blogs = wrapAsync(async (req, res) => {
+  const blogs = await Blog.find({ author: req.user.username })
+    .populate('comments')
+    .sort({ updatedAt: 'desc' });
+
+  res.json({ blogs });
+});
+
+exports.admin_blogs = wrapAsync(async (req, res) => {
+  const blogs = await Blog.find({})
     .populate('comments')
     .sort({ updatedAt: 'desc' });
 
