@@ -59,7 +59,7 @@ exports.user_register = [
         if (err) return next(err);
         passport.authenticate('local')(req, res, () => {
           const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-            expiresIn: '7d',
+            expiresIn: '1d',
           });
 
           return res.status(200).json({
@@ -82,7 +82,7 @@ exports.user_login = (req, res, next) => {
     req.logIn(user, { session: false }, (err) => {
       if (err) return next(err);
       const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-        expiresIn: '7d',
+        expiresIn: '1d',
       });
 
       return res.status(200).json({

@@ -35,7 +35,7 @@ const options = {
 
 passport.use(
   new JWTStrategy(options, (jwtPayload, done) => {
-    User.findOne({ id: jwtPayload.sub }, (err, user) => {
+    User.findById(jwtPayload._id, (err, user) => {
       if (err) {
         return done(err, false);
       }
