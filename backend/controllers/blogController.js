@@ -71,7 +71,7 @@ exports.blog_update = wrapAsync(async (req, res) => {
 });
 
 exports.blog_delete = wrapAsync(async (req, res) => {
-  await Blog.findByIdAndDelete(req.params.id);
+  const blog = await Blog.findByIdAndDelete(req.params.id);
 
-  res.json({ message: 'Blog deleted!' });
+  res.json({ blog });
 });

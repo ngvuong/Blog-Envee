@@ -15,6 +15,11 @@ function blogReducer(state, action) {
         ...state,
         isLoading: true,
       };
+    case 'STOP_LOADING':
+      return {
+        ...state,
+        isLoading: false,
+      };
     case 'RESET':
       return {
         ...state,

@@ -55,16 +55,13 @@ function BlogEditor({ edit }) {
       const { title, content, author, image, topics, published } =
         location.state.blog;
       setFormData({ title, content, author, image, topics, published });
-      setIsLoading(false);
     } else if (blogid) {
       getBlogs().then((data) => {
         const { title, content, author, image, topics, published } =
           data.blogs.find((blog) => blog._id === blogid);
         setFormData({ title, content, author, image, topics, published });
-        setIsLoading(false);
       });
     }
-    setIsLoading(false);
   }, [blogid, location, navigate, user]);
 
   const onChange = (e) => {
@@ -106,12 +103,9 @@ function BlogEditor({ edit }) {
     }
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   return (
     <StyledContainer>
+      {isLoading && <Spinner />}
       <h1>Blog Editor</h1>
       <Form onSubmit={onSave}>
         <div>
@@ -136,7 +130,10 @@ function BlogEditor({ edit }) {
           </label>
           <Editor
             apiKey={process.env.REACT_APP_API_KEY}
-            onInit={(evt, editor) => (editorRef.current = editor)}
+            onInit={(evt, editor) => {
+              setIsLoading(false);
+              editorRef.current = editor;
+            }}
             init={{
               selector: 'textarea',
               height: 400,

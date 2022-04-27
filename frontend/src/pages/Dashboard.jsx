@@ -34,7 +34,7 @@ function Dashboard() {
       <section>
         <h2>
           <span>
-            <AiFillEdit /> Edit Blogs ({blogs.length})
+            <AiFillEdit /> Edit Blogs [<span>{blogs.length}</span>]
           </span>
           {user.admin && (
             <Link to='/dashboard/admin'>
@@ -72,10 +72,17 @@ const StyledContainer = styled.main`
       align-items: center;
       margin-bottom: 5rem;
 
-      span {
+      & > span {
         display: flex;
         align-items: center;
-        gap: 1rem;
+
+        svg {
+          margin-right: 1rem;
+        }
+
+        span {
+          color: #ffcc20;
+        }
       }
     }
 

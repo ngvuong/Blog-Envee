@@ -9,6 +9,14 @@ function Spinner() {
 }
 
 const StyledContainer = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+
   div {
     position: fixed;
     top: 50%;
@@ -19,6 +27,7 @@ const StyledContainer = styled.div`
     border-top: 0.5rem solid #2888dd;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
+    z-index: 2;
   }
 
   @keyframes spin {

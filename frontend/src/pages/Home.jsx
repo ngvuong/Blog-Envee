@@ -21,6 +21,11 @@ function Home() {
     if (!blogs.length) {
       dispatch({ type: 'LOADING' });
       getBlogs().then((data) => {
+        if (!data.blogs.length) {
+          dispatch({ type: 'STOP_LOADING' });
+          return;
+        }
+
         dispatch({ type: 'FETCH_BLOGS', blogs: data.blogs });
       });
     }
@@ -64,7 +69,6 @@ function Home() {
 
 const StyledContainer = styled.main`
   padding: 5rem;
-  overflow: auto;
 
   section:first-child {
     display: flex;
