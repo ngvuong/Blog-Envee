@@ -22,18 +22,21 @@ function Blog() {
       if (!blogs.length) {
         dispatch({ type: 'LOADING' });
         getBlogs().then((data) => {
-          const publishedBlogs = data.blogs.filter((blog) => blog.published);
-          dispatch({ type: 'FETCH_BLOGS', blogs: publishedBlogs });
+          dispatch({ type: 'FETCH_BLOGS', blogs: data.blogs });
         });
       } else {
         setBlog(() => {
           const blog = blogs.find((blog) => blog._id === blogid);
-          if (!blog) setNotFound(true);
-          document.title =
-            blog.title.replace(/\b\w/g, (l) => l.toUpperCase()) || 'Blog Envee';
+          if (!blog) {
+            setNotFound(true);
+            return;
+          }
           return blog;
         });
       }
+    } else {
+      document.title =
+        blog.title.replace(/\b\w/g, (l) => l.toUpperCase()) || 'Blog Envee';
     }
   }, [blog, blogid, blogs, dispatch]);
 

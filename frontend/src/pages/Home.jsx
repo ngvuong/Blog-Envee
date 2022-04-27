@@ -21,8 +21,7 @@ function Home() {
     if (!blogs.length) {
       dispatch({ type: 'LOADING' });
       getBlogs().then((data) => {
-        const publishedBlogs = data.blogs.filter((blog) => blog.published);
-        dispatch({ type: 'FETCH_BLOGS', blogs: publishedBlogs });
+        dispatch({ type: 'FETCH_BLOGS', blogs: data.blogs });
       });
     }
   }, [blogs, dispatch]);

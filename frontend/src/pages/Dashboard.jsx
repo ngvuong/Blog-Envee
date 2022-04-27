@@ -18,11 +18,8 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    getBlogs().then((data) => {
-      const foundBlogs = data.blogs.filter(
-        (blog) => blog.author === user.username
-      );
-      setBlogs(foundBlogs);
+    getBlogs('user', user.token).then((data) => {
+      setBlogs(data.blogs);
       setIsLoading(false);
     });
   }, [user]);
@@ -33,21 +30,28 @@ function Dashboard() {
 
   return (
     <StyledContainer>
-      <h1>{user.username} Dashboard</h1>
+      <h1>{user.username}'s Dashboard</h1>
       <section>
         <h2>
           <span>
             <AiFillEdit /> Edit Blogs ({blogs.length})
           </span>
+          {user.admin && (
+            <Link to='/dashboard/admin'>
+              <Button background='#5d5d5d' tabIndex='-1'>
+                Admin Dashboard
+              </Button>
+            </Link>
+          )}
           <Link to='/editor'>
-            <Button background='#1a77bb' tabIndex='-1'>
+            <Button background='#445566' tabIndex='-1'>
               New Blog
             </Button>
           </Link>
         </h2>
         <div>
           {blogs.map((blog) => (
-            <BlogCard key={blog._id} blog={blog} edit={true} />
+            <BlogCard key={blog._id} blog={blog} edit />
           ))}
           {!blogs.length && <AiFillMeh />}
         </div>
@@ -66,7 +70,7 @@ const StyledContainer = styled.main`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: 5rem;
 
       span {
         display: flex;
@@ -76,7 +80,7 @@ const StyledContainer = styled.main`
     }
 
     button {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 2.5vw, 2rem);
     }
 
     a {
@@ -93,6 +97,15 @@ const StyledContainer = styled.main`
         color: #ffcc20;
         font-size: 5rem;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+
+    h2 {
+      flex-direction: column-reverse;
+      gap: 2rem;
     }
   }
 `;

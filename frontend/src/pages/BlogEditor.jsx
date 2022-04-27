@@ -10,7 +10,7 @@ import { getBlogs } from '../api/blogService';
 import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
-function BlogEditor(edit) {
+function BlogEditor({ edit }) {
   const [{ user }] = useAuth();
   const [, dispatch] = useBlog();
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +30,8 @@ function BlogEditor(edit) {
 
   const navigate = useNavigate();
 
+  const { title, content, image, topics, published } = formData;
+
   const editorRef = useRef(null);
   const log = () => {
     if (editorRef.current) {
@@ -37,6 +39,11 @@ function BlogEditor(edit) {
       editorRef.current.focus();
     }
   };
+
+  useEffect(() => {
+    document.title = 'Blog Editor';
+  }, []);
+
   useEffect(() => {
     if (user.username !== formData.author) {
       navigate('/');
@@ -60,8 +67,6 @@ function BlogEditor(edit) {
     setIsLoading(false);
   }, [blogid, location, navigate, user]);
 
-  const { title, content, image, topics, published } = formData;
-
   const onChange = (e) => {
     const { name, value } = e.target;
     if (name === 'published') {
@@ -76,7 +81,7 @@ function BlogEditor(edit) {
 
   const onSave = (e) => {
     e.preventDefault();
-    console.log(formData);
+
     if (!title || !content) {
       setErrors({
         title: title ? '' : '*Title is required',
@@ -85,7 +90,20 @@ function BlogEditor(edit) {
       window.scrollTo(0, 0);
       return;
     }
-    createBlog(formData, user.token).then(() => dispatch({ type: 'RESET' }));
+
+    if (edit) {
+      console.log('edit');
+    } else {
+      createBlog(formData, user.token).then((data) => {
+        dispatch({ type: 'RESET' });
+        const blog = data.blog;
+        if (!blog.published) {
+          navigate('/dashboard');
+        } else {
+          navigate('/blogs/' + blog._id);
+        }
+      });
+    }
   };
 
   if (isLoading) {

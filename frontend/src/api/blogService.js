@@ -3,9 +3,17 @@ import axios from 'axios';
 const API_URL = '/api/blogs/';
 
 // Get blogs
-const getBlogs = async () => {
+const getBlogs = async (authLevel = '', token) => {
+  const configs = {};
+
+  if (authLevel === 'user' || authLevel === 'admin') {
+    configs.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(API_URL + authLevel, configs);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -20,7 +28,8 @@ const createBlog = async (blog, token) => {
   };
 
   try {
-    await axios.post(API_URL, blog, configs);
+    const response = await axios.post(API_URL, blog, configs);
+    return response.data;
   } catch (error) {
     console.error(error);
   }
