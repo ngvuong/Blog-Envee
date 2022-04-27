@@ -1,6 +1,7 @@
 const { body, validationResult } = require('express-validator');
 const wrapAsync = require('../utils/wrapAsync');
 const Blog = require('../models/blog');
+const Comment = require('../models/comment');
 
 exports.blogs_list = wrapAsync(async (req, res) => {
   const blogs = await Blog.find({ published: true })
@@ -72,6 +73,6 @@ exports.blog_update = wrapAsync(async (req, res) => {
 
 exports.blog_delete = wrapAsync(async (req, res) => {
   const blog = await Blog.findByIdAndDelete(req.params.id);
-
+  await Comment.deleteMany({ blog: blog._id });
   res.json({ blog });
 });

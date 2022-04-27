@@ -5,6 +5,7 @@ const commentSchema = new Schema(
   {
     username: { type: String, required: true },
     content: { type: String, required: true },
+    blog: { type: Schema.Types.ObjectId, ref: 'Blog', required: true },
   },
   { timestamps: true }
 );

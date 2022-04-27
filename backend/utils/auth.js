@@ -15,9 +15,7 @@ const authenticateAuthor = (req, res, next) => {
   passport.authenticate('jwt', { session: false })(req, res, async () => {
     if (req.user) {
       const blog = await Blog.findById(req.params.id);
-      if (req.user.username === blog.author) {
-        return next();
-      }
+      if (req.user.username === blog.author || req.user.admin) return next();
     }
     return next(
       new appError('You are not authorized to perform this action', 401)

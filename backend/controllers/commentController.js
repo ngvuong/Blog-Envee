@@ -6,10 +6,14 @@ exports.comment_create = wrapAsync(async (req, res) => {
   const { username, content } = req.body;
   const { id } = req.params;
 
-  const comment = await Comment.create({ username, content });
-  await Blog.findByIdAndUpdate(id, {
-    $push: { comments: { $each: [comment._id], $position: 0 } },
-  });
+  const comment = await Comment.create({ username, content, blog: id });
+  await Blog.findByIdAndUpdate(
+    id,
+    {
+      $push: { comments: { $each: [comment._id], $position: 0 } },
+    },
+    { timestamps: false }
+  );
 
   res.json({ comment });
 });
