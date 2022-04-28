@@ -38,6 +38,7 @@ const StyledForm = styled.form`
 
   input,
   textarea {
+    background-color: #222f3e;
     border: 1px solid #4c636e;
     border-radius: 0.5rem;
   }

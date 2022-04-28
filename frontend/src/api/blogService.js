@@ -35,11 +35,39 @@ const createBlog = async (blog, token) => {
   }
 };
 
+const updateBlog = async (blogid, blog, token) => {
+  const configs = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.put(API_URL + blogid, blog, configs);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteBlog = async (blogid, token) => {
+  const configs = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    await axios.delete(`${API_URL}${blogid}`, configs);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const createComment = async (blogid, comment) => {
   try {
-    await axios.post(`${API_URL}${blogid}/comments`, comment);
-    const data = await getBlogs();
-    return data.blogs;
+    const response = await axios.post(`${API_URL}${blogid}/comments`, comment);
+    return response.data.comment;
   } catch (error) {
     console.error(error);
   }
@@ -61,4 +89,11 @@ const deleteComment = async (blogid, commentid, token) => {
   }
 };
 
-export { getBlogs, createBlog, createComment, deleteComment };
+export {
+  getBlogs,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  createComment,
+  deleteComment,
+};

@@ -5,13 +5,14 @@ import { useAuth } from '../contexts/authContext';
 import { parseISO, formatDistance } from 'date-fns';
 import styled from 'styled-components';
 
-function Comment({ comment, blogid }) {
+function Comment({ comment, blogid, removeComment }) {
   const [{ user }] = useAuth();
   const [, dispatch] = useBlog();
 
   const onDelete = () => {
     deleteComment(blogid, comment._id, user.token).then((blogs) => {
-      dispatch({ type: 'FETCH_BLOGS', blogs });
+      dispatch({ type: 'RESET_BLOGS' });
+      removeComment(comment);
     });
   };
 

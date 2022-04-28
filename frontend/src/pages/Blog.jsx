@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
@@ -7,43 +7,66 @@ import Comment from '../components/Comment';
 import CommentForm from '../components/CommentForm';
 import { useBlog } from '../contexts/blogContext';
 import { getBlogs } from '../api/blogService';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 
 function Blog() {
   const location = useLocation();
   const [blog, setBlog] = useState(location?.state?.blog || null);
+  const [comments, setComments] = useState(blog?.comments || []);
   const [notFound, setNotFound] = useState(false);
   const [{ blogs, isLoading }, dispatch] = useBlog();
   const { blogid } = useParams();
+  const navigate = useNavigate();
+
+  const fetchBlog = useCallback(() => {
+    if (blogs.length) {
+      const blog = blogs.find((blog) => blog._id === blogid);
+      if (!blog) {
+        setNotFound(true);
+        return;
+      }
+      setBlog(blog);
+      setComments(blog.comments);
+      navigate(location.pathname, { state: { blog }, replace: true });
+    } else {
+      dispatch({ type: 'LOADING' });
+      getBlogs().then((data) => {
+        if (!data.blogs.length) {
+          setNotFound(true);
+          dispatch({ type: 'STOP_LOADING' });
+          return;
+        }
+        dispatch({ type: 'FETCH_BLOGS', blogs: data.blogs });
+      });
+    }
+  }, [blogid, blogs, dispatch, location, navigate]);
 
   useEffect(() => {
     if (!blog) {
-      if (!blogs.length) {
-        dispatch({ type: 'LOADING' });
-        getBlogs().then((data) => {
-          dispatch({ type: 'FETCH_BLOGS', blogs: data.blogs });
-        });
-      } else {
-        setBlog(() => {
-          const blog = blogs.find((blog) => blog._id === blogid);
-          if (!blog) {
-            setNotFound(true);
-            return;
-          }
-          return blog;
-        });
-      }
+      fetchBlog();
     } else {
       document.title =
         blog.title.replace(/\b\w/g, (l) => l.toUpperCase()) || 'Blog Envee';
     }
-  }, [blog, blogid, blogs, dispatch]);
+  }, [blog, fetchBlog]);
 
   useEffect(() => {
     Prism.highlightAll();
     window.scrollTo(0, 0);
   }, []);
+
+  const addComment = (comment) => {
+    setComments([comment, ...comments]);
+    navigate(location.pathname, { replace: true });
+  };
+
+  const removeComment = (comment) => {
+    setComments((prevComments) =>
+      prevComments.filter((c) => c._id !== comment._id)
+    );
+    navigate(location.pathname, { replace: true });
+  };
 
   if (isLoading) {
     return <Spinner />;
@@ -77,10 +100,17 @@ function Blog() {
           </ul>
           <section dangerouslySetInnerHTML={{ __html: blog.content }}></section>
           <section>
-            <h2>Discussion ({blog.comments.length})</h2>
-            <CommentForm blogid={blogid} />
-            {blog.comments.map((comment) => (
-              <Comment key={comment._id} comment={comment} blogid={blogid} />
+            <h2>
+              Discussion (<span>{blog.comments.length}</span>)
+            </h2>
+            <CommentForm blogid={blogid} addComment={addComment} />
+            {comments.map((comment) => (
+              <Comment
+                key={comment._id}
+                comment={comment}
+                blogid={blogid}
+                removeComment={removeComment}
+              />
             ))}
           </section>
         </article>
@@ -132,6 +162,7 @@ const StyledContainer = styled.main`
       gap: 0.5rem;
 
       li {
+        color: #ffcc20;
         text-transform: capitalize;
         background-color: #41555f;
         padding: 0 0.5rem;
@@ -143,11 +174,15 @@ const StyledContainer = styled.main`
       text-align: left;
 
       p > code {
-        color: #ff55a5;
+        color: #f5a;
       }
 
       h2 {
         text-align: left;
+
+        span {
+          color: #ffcc20;
+        }
       }
     }
   }

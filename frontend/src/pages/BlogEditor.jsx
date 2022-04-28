@@ -178,7 +178,7 @@ function BlogEditor({ edit }) {
         <div>
           <label htmlFor='image'>Image</label>
           <input
-            type='text'
+            type='url'
             id='image'
             name='image'
             value={image}

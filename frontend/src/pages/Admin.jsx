@@ -62,7 +62,6 @@ function Admin() {
                 key={blog._id}
                 blog={blog}
                 edit
-                remove
                 onRemove={() => onRemove(blog._id)}
               />
             ))}

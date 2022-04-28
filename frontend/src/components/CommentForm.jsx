@@ -5,7 +5,7 @@ import { useBlog } from '../contexts/blogContext';
 import { createComment } from '../api/blogService';
 import styled from 'styled-components';
 
-function CommentForm({ blogid }) {
+function CommentForm({ blogid, addComment }) {
   const [{ isAuthenticated, user }] = useAuth();
   const [, dispatch] = useBlog();
   const [comment, setComment] = useState({
@@ -33,8 +33,9 @@ function CommentForm({ blogid }) {
       return;
     }
 
-    createComment(blogid, comment).then((blogs) => {
-      dispatch({ type: 'FETCH_BLOGS', blogs });
+    createComment(blogid, comment).then((newComment) => {
+      dispatch({ type: 'RESET_BLOGS' });
+      addComment(newComment);
       setComment({ username: '', content: '' });
     });
   };

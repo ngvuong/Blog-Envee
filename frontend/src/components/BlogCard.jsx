@@ -3,7 +3,7 @@ import Button from './Button';
 import { Link } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 
-function BlogCard({ blog, edit, remove, onRemove }) {
+function BlogCard({ blog, edit, onRemove }) {
   return (
     <StyledArticle blog={blog} edit={edit}>
       <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`} state={{ blog }}>
@@ -16,7 +16,7 @@ function BlogCard({ blog, edit, remove, onRemove }) {
           ))}
         </ul>
       </Link>
-      {remove && (
+      {onRemove && (
         <Button background='#800' onClick={onRemove}>
           Remove
         </Button>
@@ -45,7 +45,7 @@ const StyledArticle = styled.article`
   h3 {
     font-size: 2.4rem;
     text-transform: capitalize;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 
   img {
@@ -74,6 +74,7 @@ const StyledArticle = styled.article`
     margin-top: 1rem;
 
     li {
+      color: #ffcc20;
       text-transform: capitalize;
       background-color: #41555f;
       padding: 0 0.5rem;

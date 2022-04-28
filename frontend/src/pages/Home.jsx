@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import Button from '../components/Button';
 import BlogCard from '../components/BlogCard';
 import Spinner from '../components/Spinner';
 import { useBlog } from '../contexts/blogContext';
 import { getBlogs } from '../api/blogService';
-import styled from 'styled-components';
 
+import { FaBlog } from 'react-icons/fa';
 import { AiOutlineArrowDown } from 'react-icons/ai';
 import web from '../assets/web.png';
 
@@ -56,7 +57,9 @@ function Home() {
       </section>
       <hr />
       <section id='blogs'>
-        <h2>Blogs</h2>
+        <h2>
+          <FaBlog /> Blogs [<span>{blogs.length}</span>]
+        </h2>
         <div>
           {blogs.map((blog) => (
             <BlogCard key={blog._id} blog={blog} />
@@ -69,6 +72,7 @@ function Home() {
 
 const StyledContainer = styled.main`
   padding: 5rem;
+  overflow-x: hidden;
 
   section:first-child {
     display: flex;
@@ -145,13 +149,27 @@ const StyledContainer = styled.main`
     }
   }
 
+  hr {
+    border: 1px solid #ffcc20;
+  }
+
   section:last-child {
     margin-top: 5rem;
 
     h2 {
+      display: flex;
+      align-items: baseline;
       font-size: 3rem;
       text-align: left;
       margin: 5rem 0;
+
+      svg {
+        margin-right: 1rem;
+      }
+
+      span {
+        color: #ffcc20;
+      }
     }
 
     div {
