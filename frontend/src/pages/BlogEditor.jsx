@@ -6,7 +6,7 @@ import Spinner from '../components/Spinner';
 import { createBlog } from '../api/blogService';
 import { useAuth } from '../contexts/authContext';
 import { useBlog } from '../contexts/blogContext';
-import { getBlogs } from '../api/blogService';
+import { getBlogs, updateBlog } from '../api/blogService';
 import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ function BlogEditor({ edit }) {
     topics: '',
     published: false,
   });
-  const [errors, setErrors] = useState({ title: '', content: '' });
+  const [errors, setErrors] = useState({ title: '', content: '', image: '' });
 
   const { blogid } = useParams();
 
@@ -55,17 +55,34 @@ function BlogEditor({ edit }) {
       const { title, content, author, image, topics, published } =
         location.state.blog;
       setFormData({ title, content, author, image, topics, published });
+      setImgURL(image);
     } else if (blogid) {
       getBlogs().then((data) => {
         const { title, content, author, image, topics, published } =
           data.blogs.find((blog) => blog._id === blogid);
         setFormData({ title, content, author, image, topics, published });
+        setImgURL(image);
       });
     }
   }, [blogid, location, navigate, user]);
 
+  const [imgURL, setImgURL] = useState('');
+  const timeout = useRef(null);
+
+  const debounceImgURL = (imgUrl) => {
+    clearTimeout(timeout.current);
+    setImgURL('');
+    timeout.current = setTimeout(() => {
+      setImgURL(imgUrl);
+    }, 3000);
+  };
+
   const onChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'image') {
+      debounceImgURL(value);
+      if (!value || !imgURL) setErrors({ ...errors, image: '' });
+    }
     if (name === 'published') {
       setFormData({ ...formData, published: !published });
     } else {
@@ -88,8 +105,18 @@ function BlogEditor({ edit }) {
       return;
     }
 
+    if (errors.image) return;
+
     if (edit) {
-      console.log('edit');
+      updateBlog(blogid, formData, user.token).then((data) => {
+        const blog = data.blog;
+        if (!blog.published) {
+          navigate('/dashboard');
+        } else {
+          dispatch({ type: 'RESET_BLOGS' });
+          navigate('/blogs/' + blog._id, { state: { blog } });
+        }
+      });
     } else {
       createBlog(formData, user.token).then((data) => {
         const blog = data.blog;
@@ -180,11 +207,24 @@ function BlogEditor({ edit }) {
           <input
             type='url'
             id='image'
+            className={errors.image ? 'invalid' : ''}
             name='image'
             value={image}
             onChange={onChange}
             placeholder='Image URL'
           />
+          {errors.image && <p role='alert'>{errors.image}</p>}
+          {imgURL && (
+            <img
+              src={image}
+              onError={() =>
+                setErrors({ ...errors, image: 'Invalid image URL' })
+              }
+              onLoad={() => setErrors({ ...errors, image: '' })}
+              alt='Blog placeholder'
+              hidden
+            />
+          )}
         </div>
         <div>
           <label htmlFor='topics'>Topics (Comma separated)</label>
@@ -211,7 +251,11 @@ function BlogEditor({ edit }) {
             <span></span>
           </label>
         </div>
-        <Button background='green' type='submit' disabled={!title || !content}>
+        <Button
+          background='green'
+          type='submit'
+          disabled={!title || !content || errors.image}
+        >
           Save
         </Button>
       </Form>

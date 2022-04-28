@@ -30,7 +30,7 @@ exports.admin_blogs = wrapAsync(async (req, res) => {
 exports.blog_create = [
   body('title', 'Title is required').trim().notEmpty().escape(),
   body('content', 'Content is required').trim().notEmpty(),
-  body('image').trim().escape(),
+  body('image').isURL().trim(),
   body('topics').trim().escape(),
   wrapAsync(async (req, res) => {
     const { title, content, author, image, topics, published } = req.body;
@@ -59,17 +59,32 @@ exports.blog_create = [
   }),
 ];
 
-exports.blog_update = wrapAsync(async (req, res) => {
-  const { title, content, image, topics, published } = req.body;
+exports.blog_update = [
+  body('title', 'Title is required').trim().notEmpty().escape(),
+  body('content', 'Content is required').trim().notEmpty(),
+  body('image').isURL().trim(),
+  body('topics').trim().escape(),
+  wrapAsync(async (req, res) => {
+    const { title, content, image, topics, published } = req.body;
 
-  const blog = await Blog.findByIdAndUpdate(
-    req.params.id,
-    { title, content, image, topics, published },
-    { new: true }
-  );
+    const blogImg =
+      image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085';
 
-  res.json({ blog });
-});
+    let topicsArr = [
+      ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
+    ];
+
+    if (!topicsArr[0]) topicsArr = ['Web Development'];
+
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      { title, content, image: blogImg, topics: topicsArr, published },
+      { new: true }
+    );
+
+    res.json({ blog });
+  }),
+];
 
 exports.blog_delete = wrapAsync(async (req, res) => {
   const blog = await Blog.findByIdAndDelete(req.params.id);
