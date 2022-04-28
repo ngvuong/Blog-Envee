@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Blog from './pages/Blog';
+import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
 import BlogEditor from './pages/BlogEditor';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -42,8 +43,11 @@ function App() {
                   <Route path='editor' element={<BlogEditor />} />
                   <Route
                     path='blogs/:blogid/edit'
-                    element={<BlogEditor edit={true} />}
+                    element={<BlogEditor edit />}
                   />
+                </Route>
+                <Route element={<ProtectedRoute authLevel='admin' />}>
+                  <Route path='dashboard/admin' element={<Admin />} />
                 </Route>
                 <Route path='*' element={<h1>Are you lost?</h1>} />
               </Routes>

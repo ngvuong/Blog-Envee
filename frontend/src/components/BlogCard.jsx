@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import Button from './Button';
 import { Link } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 
-function BlogCard({ blog, edit }) {
+function BlogCard({ blog, edit, remove, onRemove }) {
   return (
     <StyledArticle blog={blog} edit={edit}>
       <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`} state={{ blog }}>
@@ -15,6 +16,11 @@ function BlogCard({ blog, edit }) {
           ))}
         </ul>
       </Link>
+      {remove && (
+        <Button background='#800' onClick={onRemove}>
+          Remove
+        </Button>
+      )}
     </StyledArticle>
   );
 }
@@ -29,6 +35,7 @@ const StyledArticle = styled.article`
         ? '2px double #1abb5a'
         : '2px double #bb2626'
       : 'none'};
+
   a,
   a:link,
   a:visited {
@@ -72,6 +79,10 @@ const StyledArticle = styled.article`
       padding: 0 0.5rem;
       border-radius: 1rem;
     }
+  }
+
+  button {
+    margin-top: 1rem;
   }
 
   @media (max-width: 768px) {

@@ -92,12 +92,12 @@ function BlogEditor({ edit }) {
       console.log('edit');
     } else {
       createBlog(formData, user.token).then((data) => {
-        dispatch({ type: 'RESET' });
         const blog = data.blog;
         if (!blog.published) {
           navigate('/dashboard');
         } else {
-          navigate('/blogs/' + blog._id);
+          dispatch({ type: 'RESET_BLOGS' });
+          navigate('/blogs/' + blog._id, { state: { blog } });
         }
       });
     }

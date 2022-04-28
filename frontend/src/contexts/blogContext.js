@@ -20,7 +20,7 @@ function blogReducer(state, action) {
         ...state,
         isLoading: false,
       };
-    case 'RESET':
+    case 'RESET_BLOGS':
       return {
         ...state,
         blogs: [],
