@@ -5,10 +5,16 @@ import 'prismjs/themes/prism-tomorrow.css';
 import Spinner from '../components/Spinner';
 import Comment from '../components/Comment';
 import CommentForm from '../components/CommentForm';
+import Image from '../components/Image';
 import { useBlog } from '../contexts/blogContext';
 import { getBlogs } from '../api/blogService';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
+import {
+  AiOutlineUser,
+  AiTwotoneCalendar,
+  AiOutlineLike,
+} from 'react-icons/ai';
 
 function Blog() {
   const location = useLocation();
@@ -78,8 +84,12 @@ function Blog() {
         <article>
           <div>
             <h1>{blog.title}</h1>
-            <p>{`Posted by ${blog.author}`}</p>
             <p>
+              <AiOutlineUser />
+              {`Posted by ${blog.author}`}
+            </p>
+            <p>
+              <AiTwotoneCalendar />
               {format(parseISO(blog.createdAt), 'MMMM do, yyyy')}
               {blog.createdAt !== blog.updatedAt ? (
                 <>
@@ -92,16 +102,21 @@ function Blog() {
               )}
             </p>
           </div>
-          <img src={blog.image} alt='blog post placeholder' />
+          <Image src={blog.image} alt='Blog post placeholder' />
           <ul>
             {blog.topics.map((topic) => (
               <li key={topic}>{topic}</li>
             ))}
           </ul>
-          <section dangerouslySetInnerHTML={{ __html: blog.content }}></section>
+          <section dangerouslySetInnerHTML={{ __html: blog.content }} />
+          <div>
+            <button>
+              {blog.likes} <AiOutlineLike />
+            </button>
+          </div>
           <section>
             <h2>
-              Discussion (<span>{blog.comments.length}</span>)
+              Discussion [<span>{comments.length}</span>]
             </h2>
             <CommentForm blogid={blogid} addComment={addComment} />
             {comments.map((comment) => (
@@ -133,7 +148,7 @@ const StyledContainer = styled.main`
     margin: 0 auto;
     font-size: clamp(1.6rem, 3vw, 1.8rem);
 
-    div {
+    & > div {
       text-align: left;
 
       h1 {
@@ -145,7 +160,11 @@ const StyledContainer = styled.main`
       }
 
       p {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         color: #999;
+        font-size: 1.4rem;
       }
     }
 
@@ -170,8 +189,32 @@ const StyledContainer = styled.main`
       }
     }
 
+    & > div:last-of-type {
+      display: flex;
+      justify-content: center;
+
+      button {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        color: #ffcc20;
+        background-color: #455;
+        padding: 1rem 2rem;
+        border: 1px solid #ffcc20;
+        border-radius: 0.5rem;
+      }
+
+      button:hover {
+        box-shadow: 0 0 5px #ffcc20;
+      }
+    }
+
     section {
       text-align: left;
+
+      & > p {
+        margin: 2rem 0;
+      }
 
       p > code {
         color: #f5a;
