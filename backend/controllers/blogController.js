@@ -30,7 +30,11 @@ exports.admin_blogs = wrapAsync(async (req, res) => {
 exports.blog_create = [
   body('title', 'Title is required').trim().notEmpty().escape(),
   body('content', 'Content is required').trim().notEmpty(),
-  body('image').isURL().trim(),
+  body('image')
+    .trim()
+    .optional({ checkFalsy: true })
+    .isURL()
+    .withMessage('Invalid image URL'),
   body('topics').trim().escape(),
   wrapAsync(async (req, res) => {
     const { title, content, author, image, topics, published } = req.body;
