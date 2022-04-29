@@ -12,7 +12,7 @@ const blogSchema = new Schema(
     },
     topics: { type: Array, default: ['Web Development'] },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-    likes: { type: Number, default: 0 },
+    likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     published: { type: Boolean, default: false },
   },
   { timestamps: true }

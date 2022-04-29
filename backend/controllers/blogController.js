@@ -93,7 +93,7 @@ exports.blog_update = [
 exports.blog_like = wrapAsync(async (req, res) => {
   const blog = await Blog.findByIdAndUpdate(
     req.params.id,
-    { $inc: { likes: 1 } },
+    { $push: { likes: req.user._id } },
     { new: true, timestamps: false }
   );
 
