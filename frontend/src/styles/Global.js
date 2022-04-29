@@ -13,7 +13,10 @@ const GlobalStyles = createGlobalStyle`
 
   body {
     color: ${({ theme }) => theme.colors.text};
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Asul', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-size: 1.6rem;
     line-height: 1.5;
     background-color: ${({ theme }) => theme.colors.background};
