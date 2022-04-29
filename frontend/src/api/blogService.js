@@ -31,7 +31,7 @@ const createBlog = async (blog, token) => {
     const response = await axios.post(API_URL, blog, configs);
     return response.data;
   } catch (error) {
-    console.error(error);
+    return error.response.data;
   }
 };
 
@@ -50,6 +50,20 @@ const updateBlog = async (blogid, blog, token) => {
   }
 };
 
+const likeBlog = async (blogid, token) => {
+  const configs = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    await axios.put(API_URL + blogid + '/like', null, configs);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const deleteBlog = async (blogid, token) => {
   const configs = {
     headers: {
@@ -58,7 +72,7 @@ const deleteBlog = async (blogid, token) => {
   };
 
   try {
-    await axios.delete(`${API_URL}${blogid}`, configs);
+    await axios.delete(API_URL + blogid, configs);
   } catch (error) {
     console.error(error);
   }
@@ -66,7 +80,7 @@ const deleteBlog = async (blogid, token) => {
 
 const createComment = async (blogid, comment) => {
   try {
-    const response = await axios.post(`${API_URL}${blogid}/comments`, comment);
+    const response = await axios.post(API_URL + blogid + '/comments', comment);
     return response.data.comment;
   } catch (error) {
     console.error(error);
@@ -81,7 +95,7 @@ const deleteComment = async (blogid, commentid, token) => {
   };
 
   try {
-    await axios.delete(`${API_URL}${blogid}/comments/${commentid}`, configs);
+    await axios.delete(API_URL + blogid + '/comments/' + commentid, configs);
     const data = await getBlogs();
     return data.blogs;
   } catch (error) {
@@ -93,6 +107,7 @@ export {
   getBlogs,
   createBlog,
   updateBlog,
+  likeBlog,
   deleteBlog,
   createComment,
   deleteComment,

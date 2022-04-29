@@ -90,6 +90,16 @@ exports.blog_update = [
   }),
 ];
 
+exports.blog_like = wrapAsync(async (req, res) => {
+  const blog = await Blog.findByIdAndUpdate(
+    req.params.id,
+    { $inc: { likes: 1 } },
+    { new: true, timestamps: false }
+  );
+
+  res.json({ blog });
+});
+
 exports.blog_delete = wrapAsync(async (req, res) => {
   const blog = await Blog.findByIdAndDelete(req.params.id);
   await Comment.deleteMany({ blog: blog._id });

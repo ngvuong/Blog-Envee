@@ -22,9 +22,13 @@ exports.comment_delete = wrapAsync(async (req, res) => {
   const { id, commentid } = req.params;
 
   await Comment.findByIdAndDelete(commentid);
-  await Blog.findByIdAndUpdate(id, {
-    $pull: { comments: commentid },
-  });
+  await Blog.findByIdAndUpdate(
+    id,
+    {
+      $pull: { comments: commentid },
+    },
+    { timestamps: false }
+  );
 
   res.json({ message: 'Comment deleted' });
 });

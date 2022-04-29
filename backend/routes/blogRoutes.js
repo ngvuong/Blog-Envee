@@ -23,6 +23,8 @@ router
   .put(authenticateAuthor, blogController.blog_update)
   .delete(authenticateAdmin, blogController.blog_delete);
 
+router.route('/:id/like').put(authenticateUser, blogController.blog_like);
+
 router.route('/:id/comments').post(commentController.comment_create);
 
 router
