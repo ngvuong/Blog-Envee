@@ -28,7 +28,7 @@ const theme = {
 
 function App() {
   return (
-    <div className='App'>
+    <>
       <Router>
         <ThemeProvider theme={theme}>
           <GlobalStyles />
@@ -58,7 +58,7 @@ function App() {
           <Footer />
         </ThemeProvider>
       </Router>
-    </div>
+    </>
   );
 }
 

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { AiFillGithub } from 'react-icons/ai';
 
 function Footer() {
@@ -23,13 +22,16 @@ const StyledFooter = styled.footer`
   align-items: center;
   padding: 1rem;
   background-color: ${({ theme }) => theme.colors.footer};
+  margin-top: auto;
 
   div {
     color: ${({ theme }) => theme.colors.gold_primary};
     font-size: 2rem;
   }
 
-  a {
+  a,
+  a:link,
+  a:visited {
     color: inherit;
     height: 4rem;
 

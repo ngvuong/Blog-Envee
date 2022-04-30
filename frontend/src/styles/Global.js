@@ -29,6 +29,13 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+  }
+
   a, a:link, a:visited {
     color: ${({ theme }) => theme.colors.link};
     text-decoration: none;
@@ -73,6 +80,11 @@ const GlobalStyles = createGlobalStyle`
     resize: vertical;
   }
 
+  code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  background-color: #456;
+}
 `;
 
 export default GlobalStyles;
