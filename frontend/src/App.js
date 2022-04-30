@@ -7,6 +7,7 @@ import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
 import BlogEditor from './pages/BlogEditor';
 import ProtectedRoute from './components/ProtectedRoute';
+import Footer from './components/Footer';
 import { AuthProvider } from './contexts/authContext';
 import { BlogProvider } from './contexts/blogContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -16,6 +17,7 @@ import GlobalStyles from './styles/Global';
 const theme = {
   colors: {
     header: '#212529',
+    footer: '#222',
     gold_primary: '#FFCC20',
     gold_secondary: '#FFD700',
     background: '#2C3030',
@@ -53,6 +55,7 @@ function App() {
               </Routes>
             </BlogProvider>
           </AuthProvider>
+          <Footer />
         </ThemeProvider>
       </Router>
     </div>
