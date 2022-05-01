@@ -46,7 +46,7 @@ const updateBlog = async (blogid, blog, token) => {
     const response = await axios.put(API_URL + blogid, blog, configs);
     return response.data;
   } catch (error) {
-    console.error(error);
+    return error.response.data;
   }
 };
 

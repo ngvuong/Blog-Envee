@@ -38,9 +38,6 @@ exports.blog_create = [
   body('topics').trim().escape(),
   wrapAsync(async (req, res) => {
     const { title, content, author, image, topics, published } = req.body;
-    const topicsArr = [
-      ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
-    ];
 
     const errors = validationResult(req);
 
@@ -49,6 +46,10 @@ exports.blog_create = [
         errors: errors.array(),
       });
     }
+
+    const topicsArr = [
+      ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
+    ];
 
     const blog = await Blog.create({
       title,
@@ -66,10 +67,22 @@ exports.blog_create = [
 exports.blog_update = [
   body('title', 'Title is required').trim().notEmpty().escape(),
   body('content', 'Content is required').trim().notEmpty(),
-  body('image').isURL().trim(),
+  body('image')
+    .trim()
+    .optional({ checkFalsy: true })
+    .isURL()
+    .withMessage('Invalid image URL'),
   body('topics').trim().escape(),
   wrapAsync(async (req, res) => {
     const { title, content, image, topics, published } = req.body;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
 
     const blogImg =
       image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085';
