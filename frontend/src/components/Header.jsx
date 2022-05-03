@@ -25,9 +25,9 @@ function Header() {
     <StyledHeader>
       <div>
         <Link to='/'>
-          Blog
+          B<span>log</span>
           <img src={envee} alt='Letter e' />
-          nvee
+          <span>nvee</span>
         </Link>
       </div>
 
@@ -56,7 +56,7 @@ function Header() {
                 </Link>
               </li>
               <li>
-                <Link to='/register'>
+                <Link to='/register' state={{ from: location }}>
                   {' '}
                   <AiOutlineUserAdd /> Register
                 </Link>
@@ -121,9 +121,23 @@ const StyledHeader = styled.header`
     }
   }
 
-  @media (max-width: 450px) {
+  @media (max-width: 480px) {
     ul {
       flex-direction: column;
+      gap: 0;
+    }
+  }
+
+  @media (max-width: 360px) {
+    margin: 0;
+
+    span {
+      display: none;
+    }
+
+    img {
+      vertical-align: text-top;
+      margin: 0;
     }
   }
 `;

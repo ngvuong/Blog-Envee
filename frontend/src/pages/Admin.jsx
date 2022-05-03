@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import BlogCardWrapper from '../components/BlogCardWrapper';
 import BlogCard from '../components/BlogCard';
 import Spinner from '../components/Spinner';
 import { useAuth } from '../contexts/authContext';
+import { useBlog } from '../contexts/blogContext';
 import { getBlogs, deleteBlog } from '../api/blogService';
 import { AiFillEdit } from 'react-icons/ai';
 
 function Admin() {
   const [{ user }] = useAuth();
+  const [, dispatch] = useBlog();
   const [blogs, setBlogs] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,6 +34,7 @@ function Admin() {
 
   const onRemove = (id) => {
     deleteBlog(id, user.token).then(() => {
+      dispatch({ type: 'RESET_BLOGS' });
       setBlogs((prevBlogs) => {
         const newBlogs = { ...prevBlogs };
         Object.keys(blogs).forEach((author) => {
@@ -56,16 +60,11 @@ function Admin() {
           <h3>
             Posts by {author} [<span>{blogs[author].length}</span>]
           </h3>
-          <div>
+          <BlogCardWrapper>
             {blogs[author].map((blog) => (
-              <BlogCard
-                key={blog._id}
-                blog={blog}
-                edit
-                onRemove={() => onRemove(blog._id)}
-              />
+              <BlogCard key={blog._id} blog={blog} edit onRemove={onRemove} />
             ))}
-          </div>
+          </BlogCardWrapper>
         </section>
       ))}
     </StyledContainer>
@@ -73,7 +72,7 @@ function Admin() {
 }
 
 const StyledContainer = styled.main`
-  padding: 2rem 5rem;
+  padding: 2rem 5vw;
 
   h2 {
     display: flex;
@@ -94,12 +93,6 @@ const StyledContainer = styled.main`
       span {
         color: #ffcc20;
       }
-    }
-
-    div {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4rem 2rem;
     }
   }
 `;
