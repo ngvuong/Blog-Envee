@@ -85,7 +85,8 @@ exports.blog_update = [
     }
 
     const blogImg =
-      image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085';
+      image ||
+      'https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
 
     let topicsArr = [
       ...new Set(topics.split(',').map((topic) => topic.toLowerCase().trim())),
@@ -97,7 +98,7 @@ exports.blog_update = [
       req.params.id,
       { title, content, image: blogImg, topics: topicsArr, published },
       { new: true }
-    );
+    ).populate('comments');
 
     res.json({ blog });
   }),
