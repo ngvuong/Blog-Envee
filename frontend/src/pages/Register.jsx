@@ -3,8 +3,8 @@ import Form from '../components/Form';
 import Button from '../components/Button';
 import Error from '../components/Error';
 import { useAuth } from '../contexts/authContext';
-import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../api/authService';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
@@ -22,6 +22,7 @@ function Register() {
   const { username, email, password, passwordConfirmation } = formData;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     document.title = 'Register';
@@ -29,9 +30,9 @@ function Register() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate(location?.state?.from || '/');
     }
-  }, [navigate, isAuthenticated]);
+  }, [navigate, isAuthenticated, location]);
 
   useEffect(() => {
     if (error) {
@@ -160,7 +161,6 @@ function Register() {
             type='submit'
             background='#4c636e'
             disabled={
-              validationError ||
               !validConfirm ||
               !username ||
               !email ||

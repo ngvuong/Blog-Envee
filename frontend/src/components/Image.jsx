@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function Image({
-  fallback = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+  fallback = 'https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
   src,
   ...props
 }) {

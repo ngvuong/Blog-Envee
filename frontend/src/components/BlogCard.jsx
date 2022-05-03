@@ -3,15 +3,19 @@ import styled from 'styled-components';
 import Button from './Button';
 import Image from './Image';
 import ConfirmModal from '../components/ConfirmModal';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 
 function BlogCard({ blog, edit, onRemove }) {
   const [showConfirm, setShowConfirm] = useState(false);
+  const location = useLocation();
 
   return (
     <StyledArticle blog={blog} edit={edit}>
-      <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`} state={{ blog }}>
+      <Link
+        to={`/blogs/${blog._id}${edit ? '/edit' : ''}`}
+        state={{ blog, from: location }}
+      >
         <Image src={blog.image} alt='Blog post placeholder' />
         <h3>{blog.title}</h3>
         <p>{format(parseISO(blog.createdAt), 'MMMM do, yyyy')}</p>

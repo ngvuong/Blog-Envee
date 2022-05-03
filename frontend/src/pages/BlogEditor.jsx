@@ -33,20 +33,14 @@ function BlogEditor({ edit }) {
   const { title, content, image, topics, published } = formData;
 
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-      editorRef.current.focus();
-    }
-  };
 
   useEffect(() => {
     document.title = 'Blog Editor';
   }, []);
 
   useEffect(() => {
-    if (user.username !== formData.author) {
-      navigate('/');
+    if (user.username !== formData.author && !user.admin) {
+      navigate('/', { replace: true });
     }
   }, [user, formData, navigate]);
 
@@ -54,13 +48,29 @@ function BlogEditor({ edit }) {
     if (location?.state?.blog) {
       const { title, content, author, image, topics, published } =
         location.state.blog;
-      setFormData({ title, content, author, image, topics, published });
+      const topicsString = topics.join(', ');
+      setFormData({
+        title,
+        content,
+        author,
+        image,
+        topics: topicsString,
+        published,
+      });
       setImgURL(image);
     } else if (blogid) {
       getBlogs().then((data) => {
         const { title, content, author, image, topics, published } =
           data.blogs.find((blog) => blog._id === blogid);
-        setFormData({ title, content, author, image, topics, published });
+        const topicsString = topics.join(', ');
+        setFormData({
+          title,
+          content,
+          author,
+          image,
+          topics: topicsString,
+          published,
+        });
         setImgURL(image);
       });
     }
@@ -74,13 +84,19 @@ function BlogEditor({ edit }) {
     setImgURL('');
     timeout.current = setTimeout(() => {
       setImgURL(imgUrl);
-    }, 3000);
+    }, 1000);
   };
 
   const onChange = (e) => {
     const { name, value } = e.target;
     if (name === 'image') {
-      debounceImgURL(value);
+      const URLRegex =
+        /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+      if (URLRegex.test(value)) {
+        debounceImgURL(value);
+      } else {
+        setErrors({ ...errors, image: 'Invalid image URL' });
+      }
       if (!value || !imgURL) setErrors({ ...errors, image: '' });
     }
     if (name === 'published') {
@@ -109,24 +125,42 @@ function BlogEditor({ edit }) {
 
     if (edit) {
       updateBlog(blogid, formData, user.token).then((data) => {
+        if (data.errors) {
+          data.errors.forEach((error) => {
+            setErrors({ ...errors, [error.param]: error.msg });
+          });
+          return;
+        }
         const blog = data.blog;
         if (!blog.published) {
-          navigate('/dashboard');
+          navigate('/dashboard', { replace: true });
         } else {
           dispatch({ type: 'RESET_BLOGS' });
-          navigate('/blogs/' + blog._id, { state: { blog } });
+          navigate('/blogs/' + blog._id, { state: { blog }, replace: true });
         }
       });
     } else {
       createBlog(formData, user.token).then((data) => {
+        if (data.errors) {
+          data.errors.forEach((error) => {
+            setErrors({ ...errors, [error.param]: error.msg });
+          });
+          return;
+        }
         const blog = data.blog;
         if (!blog.published) {
-          navigate('/dashboard');
+          navigate('/dashboard', { replace: true });
         } else {
           dispatch({ type: 'RESET_BLOGS' });
-          navigate('/blogs/' + blog._id, { state: { blog } });
+          navigate('/blogs/' + blog._id, { state: { blog }, replace: true });
         }
       });
+    }
+  };
+
+  const focus = () => {
+    if (editorRef.current) {
+      editorRef.current.focus();
     }
   };
 
@@ -152,7 +186,7 @@ function BlogEditor({ edit }) {
           {errors.title && <p role='alert'>{errors.title}</p>}
         </div>
         <div>
-          <label htmlFor='content' onClick={log}>
+          <label htmlFor='content' onClick={focus}>
             Content<span>*</span>
           </label>
           <Editor
@@ -191,7 +225,8 @@ function BlogEditor({ edit }) {
                 'alignright alignjustify | bullist numlist outdent indent | ' +
                 'removeformat | help | link | image | code | codesample | preview | fullscreen',
               content_style:
-                'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; background-color:#222f3e; color:#F7F7F7; }',
+                'body { font-family: Helvetica,Arial,sans-serif; font-size:16px; background-color:#222f3e; color:#F7F7F7; } code {background-color:#456;}',
+
               toolbar_mode: 'sliding',
             }}
             textareaName='content'
@@ -216,7 +251,7 @@ function BlogEditor({ edit }) {
           {errors.image && <p role='alert'>{errors.image}</p>}
           {imgURL && (
             <img
-              src={image}
+              src={imgURL}
               onError={() =>
                 setErrors({ ...errors, image: 'Invalid image URL' })
               }
@@ -257,6 +292,13 @@ function BlogEditor({ edit }) {
           disabled={!title || !content || errors.image}
         >
           Save
+        </Button>
+        <Button
+          type='button'
+          background='#278'
+          onClick={() => navigate(location?.state?.from || '/dashboard')}
+        >
+          Cancel
         </Button>
       </Form>
     </StyledContainer>
