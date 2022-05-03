@@ -1,13 +1,18 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Button from './Button';
+import Image from './Image';
+import ConfirmModal from '../components/ConfirmModal';
 import { Link } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 
 function BlogCard({ blog, edit, onRemove }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+
   return (
     <StyledArticle blog={blog} edit={edit}>
       <Link to={`/blogs/${blog._id}${edit ? '/edit' : ''}`} state={{ blog }}>
-        <img src={blog.image} alt='blog post placeholder' />
+        <Image src={blog.image} alt='Blog post placeholder' />
         <h3>{blog.title}</h3>
         <p>{format(parseISO(blog.createdAt), 'MMMM do, yyyy')}</p>
         <ul>
@@ -17,18 +22,25 @@ function BlogCard({ blog, edit, onRemove }) {
         </ul>
       </Link>
       {onRemove && (
-        <Button background='#800' onClick={onRemove}>
-          Remove
-        </Button>
+        <>
+          <Button background='#800' onClick={() => setShowConfirm(true)}>
+            Remove
+          </Button>
+          {showConfirm && (
+            <ConfirmModal
+              onConfirm={() => onRemove(blog._id)}
+              onCancel={() => setShowConfirm(false)}
+            />
+          )}
+        </>
       )}
     </StyledArticle>
   );
 }
 
 const StyledArticle = styled.article`
-  flex: 1 1 30rem;
-  box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
-  padding-bottom: 2rem;
+  grid-column: span 4 / span 4;
+  padding: 1rem 1rem 2rem;
   border: ${({ blog, edit }) =>
     edit
       ? blog.published
@@ -44,16 +56,21 @@ const StyledArticle = styled.article`
 
   h3 {
     font-size: 2.4rem;
-    text-transform: capitalize;
+    text-align: left;
     margin-top: 1rem;
+  }
+
+  h3::first-letter {
+    text-transform: uppercase;
   }
 
   img {
     width: 100%;
-    height: 25vw;
+    height: 30vw;
     object-fit: cover;
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     transition: all 0.25s cubic-bezier(0.5, 0, 0.5, 1);
+    box-shadow: 0 0 5px #000;
   }
 
   a:hover img {
@@ -64,12 +81,13 @@ const StyledArticle = styled.article`
   p {
     color: #999;
     font-size: 2rem;
+    text-align: left;
   }
 
   ul {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
     margin-top: 1rem;
 
@@ -86,9 +104,21 @@ const StyledArticle = styled.article`
     margin-top: 1rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     img {
-      height: 50vw;
+      height: 45vw;
+    }
+  }
+
+  @media (max-width: 640px) {
+    img {
+      height: 65vw;
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      height: 75vw;
     }
   }
 `;

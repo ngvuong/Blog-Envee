@@ -83,7 +83,6 @@ const GlobalStyles = createGlobalStyle`
   code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-  background-color: #456;
 }
 `;
 
