@@ -6,8 +6,9 @@ import Spinner from '../components/Spinner';
 import Comment from '../components/Comment';
 import CommentForm from '../components/CommentForm';
 import Image from '../components/Image';
+import { useAuth } from '../contexts/authContext';
 import { useBlog } from '../contexts/blogContext';
-import { getBlogs } from '../api/blogService';
+import { getBlogs, likeBlog } from '../api/blogService';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { parseISO, format } from 'date-fns';
 import {
@@ -17,9 +18,11 @@ import {
 } from 'react-icons/ai';
 
 function Blog() {
+  const [{ user }] = useAuth();
   const location = useLocation();
   const [blog, setBlog] = useState(location?.state?.blog || null);
   const [comments, setComments] = useState(blog?.comments || []);
+  const [likes, setLikes] = useState(blog?.likes || []);
   const [notFound, setNotFound] = useState(false);
   const [{ blogs, isLoading }, dispatch] = useBlog();
   const { blogid } = useParams();
@@ -34,6 +37,7 @@ function Blog() {
       }
       setBlog(blog);
       setComments(blog.comments);
+      setLikes(blog.likes);
       navigate(location.pathname, { state: { blog }, replace: true });
     } else {
       dispatch({ type: 'LOADING' });
@@ -60,10 +64,24 @@ function Blog() {
   useEffect(() => {
     Prism.highlightAll();
     window.scrollTo(0, 0);
-  }, []);
+  }, [blog]);
+
+  const like = () => {
+    if (user) {
+      if (likes.includes(user.id)) return;
+      setLikes([...likes, user.id]);
+      likeBlog(blog._id, user.token).then(() => {
+        dispatch({ type: 'RESET_BLOGS' });
+        navigate(location.pathname, { replace: true });
+      });
+    } else {
+      navigate('/login', { state: { from: location } });
+    }
+  };
 
   const addComment = (comment) => {
     setComments([comment, ...comments]);
+    dispatch({ type: 'RESET_BLOGS' });
     navigate(location.pathname, { replace: true });
   };
 
@@ -71,6 +89,7 @@ function Blog() {
     setComments((prevComments) =>
       prevComments.filter((c) => c._id !== comment._id)
     );
+    dispatch({ type: 'RESET_BLOGS' });
     navigate(location.pathname, { replace: true });
   };
 
@@ -110,8 +129,8 @@ function Blog() {
           </ul>
           <section dangerouslySetInnerHTML={{ __html: blog.content }} />
           <div>
-            <button>
-              {blog.likes} <AiOutlineLike />
+            <button onClick={like}>
+              {likes.length} <AiOutlineLike />
             </button>
           </div>
           <section>
@@ -153,10 +172,13 @@ const StyledContainer = styled.main`
 
       h1 {
         display: block;
-        text-transform: capitalize;
         text-align: left;
         line-height: 1.2;
         margin: 0;
+      }
+
+      h1::first-letter {
+        text-transform: uppercase;
       }
 
       p {
@@ -172,6 +194,8 @@ const StyledContainer = styled.main`
       width: 100%;
       height: clamp(25rem, 40vw, 50rem);
       object-fit: cover;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
     }
 
     ul {
@@ -207,6 +231,10 @@ const StyledContainer = styled.main`
       button:hover {
         box-shadow: 0 0 5px #ffcc20;
       }
+
+      button:active svg {
+        transform: scale(1.2);
+      }
     }
 
     section {
@@ -222,16 +250,23 @@ const StyledContainer = styled.main`
 
       h2 {
         text-align: left;
+        margin: 2rem 0;
 
         span {
           color: #ffcc20;
         }
+      }
+
+      ol,
+      ul {
+        margin-left: 4rem;
       }
     }
   }
 
   @media (max-width: 768px) {
     padding: 0 2rem;
+
     article {
       gap: 3rem;
       width: 100%;

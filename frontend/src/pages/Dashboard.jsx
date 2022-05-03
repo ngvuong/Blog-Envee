@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import BlogCardWrapper from '../components/BlogCardWrapper';
 import BlogCard from '../components/BlogCard';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
@@ -49,19 +50,19 @@ function Dashboard() {
             </Button>
           </Link>
         </h2>
-        <div>
+        <BlogCardWrapper>
           {blogs.map((blog) => (
             <BlogCard key={blog._id} blog={blog} edit />
           ))}
           {!blogs.length && <AiFillMeh />}
-        </div>
+        </BlogCardWrapper>
       </section>
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.main`
-  padding: 2rem 5rem;
+  padding: 2rem 5vw;
 
   section {
     margin: 5rem 0;
@@ -95,12 +96,9 @@ const StyledContainer = styled.main`
     }
 
     div {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 4rem 2rem;
-
       svg {
+        grid-column: 1 / -1;
+        justify-self: center;
         color: #ffcc20;
         font-size: 5rem;
       }
@@ -108,8 +106,6 @@ const StyledContainer = styled.main`
   }
 
   @media (max-width: 768px) {
-    padding: 2rem;
-
     h2 {
       flex-direction: column-reverse;
       gap: 2rem;

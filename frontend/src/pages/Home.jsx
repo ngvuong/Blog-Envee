@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
+import BlogCardWrapper from '../components/BlogCardWrapper';
 import BlogCard from '../components/BlogCard';
 import Spinner from '../components/Spinner';
 import { useBlog } from '../contexts/blogContext';
@@ -60,18 +61,18 @@ function Home() {
         <h2>
           <FaBlog /> Blogs [<span>{blogs.length}</span>]
         </h2>
-        <div>
+        <BlogCardWrapper>
           {blogs.map((blog) => (
             <BlogCard key={blog._id} blog={blog} />
           ))}
-        </div>
+        </BlogCardWrapper>
       </section>
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.main`
-  padding: 5rem;
+  padding: 3rem 5vw;
   overflow-x: hidden;
 
   section:first-child {
@@ -170,13 +171,6 @@ const StyledContainer = styled.main`
       span {
         color: #ffcc20;
       }
-    }
-
-    div {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 5rem 2rem;
     }
   }
 
