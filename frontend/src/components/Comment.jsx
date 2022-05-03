@@ -1,17 +1,14 @@
 import Button from './Button';
 import { deleteComment } from '../api/blogService';
-import { useBlog } from '../contexts/blogContext';
 import { useAuth } from '../contexts/authContext';
 import { parseISO, formatDistance } from 'date-fns';
 import styled from 'styled-components';
 
 function Comment({ comment, blogid, removeComment }) {
   const [{ user }] = useAuth();
-  const [, dispatch] = useBlog();
 
   const onDelete = () => {
     deleteComment(blogid, comment._id, user.token).then((blogs) => {
-      dispatch({ type: 'RESET_BLOGS' });
       removeComment(comment);
     });
   };
@@ -40,6 +37,7 @@ const StyledComment = styled.div`
   padding: 1rem;
   border-radius: 1rem;
   margin: 1rem 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
   p:first-child {
     color: inherit;
@@ -48,6 +46,7 @@ const StyledComment = styled.div`
 
   p:last-of-type {
     font-size: 1.2rem;
+    color: #999;
   }
 
   button {

@@ -18,7 +18,6 @@ const StyledP = styled.p`
   color: #db3030;
   background: #fcebee;
   padding: 0.5rem;
-  margin: 2rem 0;
 `;
 
 export default Error;

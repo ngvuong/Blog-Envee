@@ -1,13 +1,11 @@
 import Button from './Button';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/authContext';
-import { useBlog } from '../contexts/blogContext';
 import { createComment } from '../api/blogService';
 import styled from 'styled-components';
 
 function CommentForm({ blogid, addComment }) {
   const [{ isAuthenticated, user }] = useAuth();
-  const [, dispatch] = useBlog();
   const [comment, setComment] = useState({
     username: user ? user.username : '',
     content: '',
@@ -34,9 +32,8 @@ function CommentForm({ blogid, addComment }) {
     }
 
     createComment(blogid, comment).then((newComment) => {
-      dispatch({ type: 'RESET_BLOGS' });
       addComment(newComment);
-      setComment({ username: '', content: '' });
+      setComment({ ...comment, content: '' });
     });
   };
 
@@ -84,8 +81,14 @@ const StyledCommentForm = styled.form`
   input,
   textarea {
     min-height: 4rem;
+    background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid #4e555a;
     resize: vertical;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
   }
 
   p {

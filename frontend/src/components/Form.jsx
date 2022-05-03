@@ -10,7 +10,7 @@ const StyledForm = styled.form`
   gap: 2rem;
   width: 50%;
   padding: 1rem;
-  margin: 2rem auto;
+  margin: 2rem auto 5rem;
 
   &::before {
     content: '';
