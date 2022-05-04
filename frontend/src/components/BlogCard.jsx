@@ -55,6 +55,9 @@ const StyledArticle = styled.article`
   a,
   a:link,
   a:visited {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     color: inherit;
   }
 
